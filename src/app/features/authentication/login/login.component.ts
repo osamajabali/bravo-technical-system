@@ -32,8 +32,9 @@ export class LoginComponent {
 		).subscribe(response => {
 			if (response.success) {
 				this.isSubmitting = false;
-				this.router.navigate(['/features'])
 				this.loginService.setUser(response.data.token);
+				localStorage.setItem('userName', response.data.fullName);
+				this.router.navigate(['/features'])
 			}
 			else {
 				this.isSubmitting = false;

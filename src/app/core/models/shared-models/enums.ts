@@ -35,3 +35,10 @@ export enum ResourceTypeEnum {
     Writing = 5,
     Speaking = 6
 }
+
+export enum ActionId {
+  View = 1,
+  Add = 2,
+  Update = 3,
+  Delete = 4,
+}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, output, signal, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SchoolCreationService } from '../../../core/services/school-creation/school-creation.service';
@@ -19,11 +19,19 @@ export class SchoolDetails implements OnInit {
   lookUps = inject(LookUps).lookups;
   schoolDetails: AddSchoolDetailsRequest = new AddSchoolDetailsRequest();
   cities = signal<City[]>([]);
+  isStepValid = output<boolean>();
+  stepSuccess = output<void>();
+  @ViewChild('schoolForm', { read: ElementRef }) schoolFormRef!: ElementRef<HTMLFormElement>;
 
   ngOnInit(): void {
+    if(sessionStorage.getItem('schoolDetails')){
+      this.schoolDetails = JSON.parse(sessionStorage.getItem('schoolDetails') || '{}');
+      this.getCities();
+    }
   }
 
   onSubmit(form: NgForm) {
+    this.isStepValid.emit(form.valid);
     if (form.invalid) {
       return;
     }
@@ -31,8 +39,18 @@ export class SchoolDetails implements OnInit {
     this.schoolDetails.stepNumber = 1;
     const formData = this.toFormData(this.schoolDetails);
     this.schoolCreationService.addSchoolDetails(formData).subscribe((res) => {
-      console.log(res);
+      if (res.success) {
+        this.schoolDetails.schoolId = res.data.newSchoolId;
+        sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails));
+        this.stepSuccess.emit();
+      }
     });
+  }
+
+  public triggerValidation() {
+    if (this.schoolFormRef?.nativeElement) {
+      this.schoolFormRef.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    }
   }
 
   toFormData(model: AddSchoolDetailsRequest): FormData {

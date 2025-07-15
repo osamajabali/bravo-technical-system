@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DOCUMENT, inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, DOCUMENT, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonDirective } from 'primeng/button';
@@ -26,8 +26,8 @@ export class Header {
   filterContent: Popover;  // Get the reference to the popover
  // Data binding
   title: string = 'Page Title';  // You can dynamically set this value
-  userName: string = 'John Doe';
-  userInitials: string = 'JD';
+  userName: string = localStorage.getItem('userName') || '';
+  userInitials: string = this.userName.split(' ').map(name => name[0]).join('');
   displayFilter: string = 'Filter'; // You can dynamically set this
   SubjectExpanded: boolean = false;
   GradesExpanded: boolean = false;

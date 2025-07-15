@@ -3,37 +3,45 @@
     <h4>School Setup Wizard - Add Grades & Subjects</h4>
   </div>
   <div class="card-body">
-    @for (field of fields; track $index) {
-        <div class="form-group">
-      <div class="row my-2">
-        <div class="col-md-5">
-          <label for="grade">Grade</label>
-          <ng-select
-            bindLabel="name"
-            [(ngModel)]="field.grade"
-            [items]="grades()"
-            bindValue="id"
-            placeholder="Select Grade">
-          </ng-select>
-        </div>
-        <div class="col-md-5">
-          <label for="subject">Subject</label>
-          <ng-select
-            bindLabel="name"
-            [(ngModel)]="field.subject"
-            [items]="subjects"
-            bindValue="id"
-            placeholder="Select Subject">
-          </ng-select>
-        </div>
-        <div class="col-md-2">
-          @if (fields.length > 1) {
-            <button class="btn text-danger mt-4" (click)="removeField($index)">Remove Field</button>
-          }
+    <form #gradesAndSubjectsForm="ngForm" AutoFormError (ngSubmit)="submitGradesAndSubjects(gradesAndSubjectsForm)">
+      @for (field of gradesAndSubjectsRequest.gradeSubjects; track $index) {
+          <div class="form-group">
+        <div class="row my-2">
+          <div class="col-md-5">
+            <label for="grade">Grade</label>
+            <ng-select
+              bindLabel="name"
+              [(ngModel)]="field.gradeId"
+              [items]="grades()"
+              bindValue="id"
+              placeholder="Select Grade"
+              name="grade{{$index}}"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-5">
+            <label for="subject">Subject</label>
+            <ng-select
+              multiple="true"
+              selectableGroup="true"
+              bindLabel="name"
+              [(ngModel)]="field.subjectIds"
+              [items]="subjects"
+              placeholder="Select Subject"
+              name="subject{{$index}}"
+              bindValue="id"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-2">
+            @if (gradesAndSubjectsRequest.gradeSubjects.length > 1) {
+              <button class="btn text-danger mt-4" type="button" (click)="removeField($index)">Remove Field</button>
+            }
+          </div>
         </div>
       </div>
-    </div>
-    }
-    <button class="btn text-primary" (click)="addField()">Add Fields</button>
+      }
+      <button class="btn text-primary" (click)="addField()">Add Fields</button>
+    </form>
   </div>
 </div>

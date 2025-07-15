@@ -4,11 +4,11 @@
 
   <div class="page-content">
     @if (activeStep() == 0) {
-    <app-school-details />
+    <app-school-details #schoolDetailsRef (isStepValid)="isStepValid.set($event)" (stepSuccess)="onStepSuccess()" />
     }
 
     @if (activeStep() == 1) {
-    <app-grades-and-subjects />
+    <app-grades-and-subjects #gradesAndSubjectsRef (isStepValid)="isStepValid.set($event)" (stepSuccess)="onStepSuccess()" />
     }
 
     @if (activeStep() == 2) {
@@ -29,7 +29,7 @@
 
   </div>
 
-  <div class="creation-footer d-flex justify-content-between align-items-center"
+  <div class="creation-footer d-flex justify-content-between align-items-center fixed-bottom"
     [ngClass]="activeStep() === 0 ? 'center' : ''">
     <div class="d-flex">
       <!-- Previous Button -->
@@ -40,7 +40,7 @@
 
     <div class="d-flex gap-4">
       <!-- Next Button -->
-      <button type="button" class="btn btn-primary"
+      <button type="button" class="btn btn-primary" gotPermission="Create School , {{actionId.Add}}"
         (click)="next()">Next</button>
     </div>
   </div>

@@ -6,7 +6,7 @@
     <div class="card-body">
       <form #schoolForm="ngForm" AutoFormError (ngSubmit)="onSubmit(schoolForm)">
         <!-- School Basic Information Section -->
-        <h5 class="bg-primary text-white p-2">School Basic Information</h5>
+        <h5>School Basic Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="nameArabic">School Name (Arabic)</label>
@@ -169,8 +169,10 @@
           </div>
         </div>
 
+        <hr class="mt-4">
+
         <!-- Contact Person Information Section -->
-        <h5 class="bg-primary text-white p-2">Contact Person Information</h5>
+        <h5>Contact Person Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="contactPersonName">Contact Person Full Name</label>
@@ -205,9 +207,11 @@
               [(ngModel)]="schoolDetails.contactPersonPhone" />
           </div>
         </div>
+        
+        <hr class="mt-4">
 
         <!-- School Academic Date Section -->
-        <h5 class="bg-primary text-white p-2">School Academic Date</h5>
+        <h5>School Academic Date</h5>
         <div class="row mb-3">
           <div class="col-md-6">
             <label for="accountOwnerId">School Academic Year</label>
@@ -243,7 +247,6 @@
               required />
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Request</button>
       </form>
     </div>
   </div>

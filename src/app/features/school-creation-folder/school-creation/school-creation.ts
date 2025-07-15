@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { StepItem, CustomStepsComponent } from '../../../shared/components/custom-steps/custom-steps.component';
 import { SchoolDetails } from "../school-details/school-details";
 import { CommonModule } from '@angular/common';
@@ -8,16 +8,21 @@ import { CreateSection } from "../create-section/create-section";
 import { AddTeacher } from "../add-teacher/add-teacher";
 import { AddStudent } from "../add-student/add-student";
 import { LookUps } from '../../../core/services/look-ups.service';
+import { GotPermissionDirective } from '../../../shared/directives/got-permission.directive';
+import { ActionId } from '../../../core/models/shared-models/enums';
 
 @Component({
   selector: 'app-school-creation',
-  standalone : true,
-  imports: [CustomStepsComponent, SchoolDetails, CommonModule, GradesAndSubjects, SchoolAdmin, CreateSection, AddTeacher, AddStudent],
+  standalone: true,
+  imports: [CustomStepsComponent, SchoolDetails, CommonModule, GradesAndSubjects, SchoolAdmin, CreateSection, AddTeacher, AddStudent, GotPermissionDirective],
   templateUrl: './school-creation.html',
   styleUrl: './school-creation.scss'
 })
 export class SchoolCreation implements OnInit {
-
+  isStepValid = signal<boolean>(true);
+  actionId = ActionId;
+  @ViewChild('schoolDetailsRef') schoolDetailsRef!: SchoolDetails;
+  @ViewChild('gradesAndSubjectsRef') gradesAndSubjectsRef!: GradesAndSubjects;
   items = signal<StepItem[]>([
     {
       id: '0',
@@ -57,17 +62,26 @@ export class SchoolCreation implements OnInit {
 
   ngOnInit(): void {
     this.lookUps.mainLookups().subscribe((res) => {
-      if(res.success){
+      if (res.success) {
         this.lookUps.setLookups(res.data);
       }
     });
   }
-  
+
   next() {
-
-    this.activeStep.set(this.activeStep() + 1);
-
-    this.updateStepsCompletion();
+    // If on the first step and invalid, trigger validation in the child
+    if (this.activeStep() === 0) {
+      this.schoolDetailsRef?.triggerValidation();
+      if (!this.isStepValid()) {
+        return;
+      }
+    }
+    if(this.activeStep() === 1){
+      this.gradesAndSubjectsRef?.triggerValidation();
+      if (!this.isStepValid()) {
+        return;
+      }
+    }
   }
 
   back() {
@@ -76,7 +90,12 @@ export class SchoolCreation implements OnInit {
     this.updateStepsCompletion();
   }
 
-    updateStepsCompletion() {
+  onStepSuccess() {
+    this.activeStep.set(this.activeStep() + 1);
+    this.updateStepsCompletion();
+  }
+
+  updateStepsCompletion() {
     for (let i = 0; i < this.items().length; i++) {
       this.items()[i].isStepCompleted = i < this.activeStep();
     }

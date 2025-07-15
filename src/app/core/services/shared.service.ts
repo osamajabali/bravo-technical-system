@@ -29,57 +29,22 @@ export class SharedService {
     this.refreshSubject.next(data); // Emit data with the refresh event
   }
 
-  getTitle() {
-    // if (JSON.parse(localStorage.getItem('title'))) {
-    //   let titleArray = JSON.parse(localStorage.getItem('title'))
-    //   let arrayLastIndex = titleArray.length ? titleArray.length - 1 : 0;
-    //   return JSON.parse(localStorage.getItem('title'))[arrayLastIndex]
-    // } else {
-    //   return ''
-    // }
-  }
+  // Function to check if the user has the specified permission
+  hasPermission(permission: string): boolean {
+    const [name, actionId] = permission.split(',').map((s) => s.trim());
 
-  pushTitle = (title: string) => {
-    let titleArray: string[] =['']
-    titleArray.push(title);
-    localStorage.setItem('title', JSON.stringify(titleArray));
-    this.getTitle()
-  }
+    // Ensure actionId is treated as a number
+    const actionIdNum = parseInt(actionId, 10);
 
-  popTitle = () => {
-    let titleArray: string[] = ['']
-    titleArray.pop();
-    localStorage.setItem('title', JSON.stringify(titleArray));
-    this.getTitle()
-  }
+    const menu = this.getPermission().menus.find((menu) => menu.name === name);
+    if (menu) {
+      const child = menu.children.find((child) => child.name === name);
+      if (child) {
+        // Check if the actionId exists in the actions of the child menu
+        return child.actions.some((action) => action.actionId === actionIdNum);
+      }
+    }
 
-  removeArray = () =>{
-    localStorage.removeItem('title');
-  }
-
-  translate = (translatedText: string): string => {
-    return this.translateService.instant(translatedText)
-  }
-
-  // Save pagination state for a specific component
-  savePageState(componentName: string, page: number): void {
-    sessionStorage.setItem(componentName, page.toString());
-  }
-
-  // Retrieve pagination state for a specific component
-  getPageState(componentName: string): number {
-    const page = sessionStorage.getItem(componentName);
-    return page ? parseInt(page) : 1; // Return 1 if no page state exists
-  }
-
-  // Save pagination state for a specific component
-  saveId(idName: string, page: number): void {
-    sessionStorage.setItem(idName, page.toString());
-  }
-
-  // Retrieve pagination state for a specific component
-  getId(idName: string): number {
-    const page = sessionStorage.getItem(idName);
-    return page ? parseInt(page) : 0; // Return 1 if no page state exists
+    return false;
   }
 }

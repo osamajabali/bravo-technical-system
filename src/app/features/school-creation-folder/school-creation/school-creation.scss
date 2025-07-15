@@ -9,3 +9,17 @@
     justify-content: center;
   }
 }
+
+.creation-footer.fixed-bottom {
+  position: sticky;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  width: 103%;
+  box-shadow: none;
+}
+
+.page-content {
+  padding-bottom: 90px; // Prevents content from being hidden behind the fixed footer
+}

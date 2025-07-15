@@ -3,6 +3,7 @@ import { HttpService } from '../http.service';
 import { Result } from '../../models/shared-models/result';
 import { Observable } from 'rxjs';
 import { AddSchoolDetailsRequest } from '../../models/school-creation/add-school-details-request.model';
+import { GradesAndSubjectsRequest } from '../../models/school-creation/grades-and-subjects.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,11 @@ import { AddSchoolDetailsRequest } from '../../models/school-creation/add-school
 export class SchoolCreationService {
   apiHlpr = inject(HttpService);
 
-  addSchoolDetails = (obj: FormData): Observable<Result<AddSchoolDetailsRequest>> => {
-    return this.apiHlpr.post<Result<AddSchoolDetailsRequest>>(`school/add/first-step`, obj);
+  addSchoolDetails = (obj: FormData): Observable<Result<{newSchoolId : number}>> => {
+    return this.apiHlpr.post<Result<{newSchoolId: number}>>(`school/add/first-step`, obj);
+  }
+
+  addGradesAndSubjects = (obj: GradesAndSubjectsRequest): Observable<Result<any>> => {
+    return this.apiHlpr.post<Result<any>>(`school/add/second-step`, obj);
   }
 }
