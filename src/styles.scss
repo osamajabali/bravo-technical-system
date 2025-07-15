@@ -1,0 +1,125 @@
+/* You can add global styles to this file, and also import other style files */
+@use "./assets/scss/variables" as vars;
+@use "./assets/scss/font-family";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+
+body {
+  font-family: "Space Grotesk", sans-serif !important;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f5f5;
+  height: 100vh;
+  overflow: hidden;
+
+  .p-menu {
+    left: 900px !important;
+  }
+  [dir="ltr"] {
+    text-align: left;
+    direction: ltr;
+
+  }
+
+  [dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+  }
+
+  
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked{
+  background-color: var(--primary-primary-400);
+}
+
+.offcanvas , .offcanvas-footer {
+  background-color: var(--primary-primary-400) !important;
+}
+
+.form-check-input:checked{
+  background-color: green !important;
+  border-color: rgb(16, 182, 16) !important;
+}
+}
+
+/* CSS Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.p-inputtext {
+  background: var(--neutral-white) !important;
+}
+
+.p-datepicker {
+  width: 100% !important;
+}
+
+.p-select,
+.p-inputtext {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.p-button-primary {
+  background: var(--primary-primary-300) !important;
+  color: var(--primary-primary-900) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-xxs) !important;
+  padding: var(--padding-xs) var(--padding-l) !important;
+  border-radius: var(--radius-m) !important;
+  border: none !important;
+}
+
+.p-button-secondary:not(.p-dialog-close-button) {
+  background: var(--neutral-white) !important;
+  color: var(--primary-primary-900) !important;
+  border: 1px solid var(--primary-primary-900) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-xxs) !important;
+  padding: var(--padding-xs) var(--padding-l) !important;
+  border-radius: var(--radius-m) !important;
+}
+
+.p-button-outlined {
+  border-color: var(--primary-primary-900) !important;
+  color: var(--primary-primary-900) !important;
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-primary-50) !important;
+  }
+}
+
+.p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* Hide scrollbar for the entire window */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* For IE/Edge */
+* {
+  -ms-overflow-style: none;
+}
+
+.bg-primary{
+    background-color: var(--primary-primary-600) !important;
+    border-color: var(--primary-primary-600) !important;
+}

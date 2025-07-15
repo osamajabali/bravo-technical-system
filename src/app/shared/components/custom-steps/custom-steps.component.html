@@ -1,0 +1,20 @@
+<div class="custom-steps">
+  <div class="steps-container">
+    @for (item of items(); track $index; let i = $index) {
+    <div
+      class="step-item"
+      [class.active]="i === activeIndex()"
+      [class.completed]="item.isStepCompleted"
+    >
+      <div class="step-number">
+        @if (item.isStepCompleted) {
+        <img src="icon-checkmark.svg" alt="" />
+        } @else {
+        {{ i + 1 }}
+        }
+      </div>
+      <div class="step-label">{{ item.label }}</div>
+    </div>
+    }
+  </div>
+</div>

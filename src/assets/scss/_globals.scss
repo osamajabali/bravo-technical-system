@@ -1,0 +1,29 @@
+@use "../../assets/scss/variables" as vars;
+
+.text-primary-900 {
+  color: vars.$primary-primary-900;
+}
+
+.mobal-btn {
+  width: 60px;
+  background: vars.$primary-primary-300;
+  color: vars.$primary-primary-900;
+  font-size: 16px;
+
+  &:hover {
+    background: vars.$primary-primary-400;
+    color: vars.$primary-primary-900;
+  }
+}
+.mobal-btn-secondary {
+  width: 60px;
+  background: transparent;
+  border: 1px solid vars.$primary-primary-300;
+  color: vars.$primary-primary-900;
+  font-size: 16px;
+
+  &:hover {
+    background: vars.$primary-primary-100;
+    color: vars.$primary-primary-900;
+  }
+}

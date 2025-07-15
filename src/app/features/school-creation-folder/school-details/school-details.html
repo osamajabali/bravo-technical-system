@@ -1,0 +1,250 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5 class="bg-primary text-white p-2">School Details</h5>
+    </div>
+    <div class="card-body">
+      <form #schoolForm="ngForm" AutoFormError (ngSubmit)="onSubmit(schoolForm)">
+        <!-- School Basic Information Section -->
+        <h5 class="bg-primary text-white p-2">School Basic Information</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="nameArabic">School Name (Arabic)</label>
+            <input
+              type="text"
+              id="nameArabic"
+              class="form-control"
+              name="nameArabic"
+              [(ngModel)]="schoolDetails.nameArabic"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="nameEnglish">School Name (English)</label>
+            <input
+              type="text"
+              id="nameEnglish"
+              class="form-control"
+              name="nameEnglish"
+              [(ngModel)]="schoolDetails.nameEnglish"
+              required />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="countryId">Country</label>
+            <ng-select
+              id="countryId"
+              name="countryId"
+              [(ngModel)]="schoolDetails.countryId"
+              [items]="lookUps().countries"
+              (ngModelChange)="getCities()"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Country"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-6">
+            <label for="cityId">City</label>
+            <ng-select
+              id="cityId"
+              name="cityId"
+              [(ngModel)]="schoolDetails.cityId"
+              [items]="cities()"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select City"
+              required>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="organizationId">Organization</label>
+            <ng-select
+              id="organizationId"
+              name="organizationId"
+              [(ngModel)]="schoolDetails.organizationId"
+              [items]="lookUps().organizations"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Organization"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-6">
+            <label for="address">Address</label>
+            <textarea
+              id="address"
+              class="form-control"
+              name="address"
+              [(ngModel)]="schoolDetails.address"></textarea>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="latitude">Latitude</label>
+            <input
+              type="text"
+              id="latitude"
+              class="form-control"
+              name="latitude"
+              [(ngModel)]="schoolDetails.latitude"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="longitude">Longitude</label>
+            <input
+              type="text"
+              id="longitude"
+              class="form-control"
+              name="longitude"
+              [(ngModel)]="schoolDetails.longitude"
+              required />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="websiteUrl">Website URL</label>
+            <input
+              type="url"
+              id="websiteUrl"
+              class="form-control"
+              name="websiteUrl"
+              [(ngModel)]="schoolDetails.websiteUrl" />
+          </div>
+          <div class="col-md-6">
+            <label for="logo">School Logo</label>
+            <input
+              type="file"
+              id="logo"
+              class="form-control"
+              name="logo"
+              (change)="schoolDetails.logo = $any($event.target).files[0]" />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="accountOwnerId">School Account Owner</label>
+            <ng-select
+              id="accountOwnerId"
+              name="accountOwnerId"
+              [(ngModel)]="schoolDetails.accountOwnerId"
+              [items]="lookUps().owners"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Account Owner"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-6">
+            <label for="contractExpiryDate">Contract Expiry Date</label>
+            <input
+              type="date"
+              id="contractExpiryDate"
+              class="form-control"
+              name="contractExpiryDate"
+              [(ngModel)]="schoolDetails.contractExpiryDate" />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="systemStatusId">School Status</label>
+            <ng-select
+              id="systemStatusId"
+              name="systemStatusId"
+              [(ngModel)]="schoolDetails.systemStatusId"
+              [items]="lookUps().statuses"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Status"
+              required>
+            </ng-select>
+          </div>
+        </div>
+
+        <!-- Contact Person Information Section -->
+        <h5 class="bg-primary text-white p-2">Contact Person Information</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="contactPersonName">Contact Person Full Name</label>
+            <input
+              type="text"
+              id="contactPersonName"
+              class="form-control"
+              name="contactPersonName"
+              [(ngModel)]="schoolDetails.contactPersonName"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="contactPersonEmail">Email</label>
+            <input
+              type="email"
+              id="contactPersonEmail"
+              class="form-control"
+              name="contactPersonEmail"
+              [(ngModel)]="schoolDetails.contactPersonEmail"
+              required />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="contactPersonPhone">Phone Number</label>
+            <input
+              type="text"
+              id="contactPersonPhone"
+              class="form-control"
+              name="contactPersonPhone"
+              [(ngModel)]="schoolDetails.contactPersonPhone" />
+          </div>
+        </div>
+
+        <!-- School Academic Date Section -->
+        <h5 class="bg-primary text-white p-2">School Academic Date</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="accountOwnerId">School Academic Year</label>
+            <ng-select
+              id="accountOwnerId"
+              name="accountOwnerId"
+              [items]="lookUps().academicYears"
+              [(ngModel)]="schoolDetails.academicYearId"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Account Owner"
+              required>
+            </ng-select>
+          </div>
+          <div class="col-md-6">
+            <label for="startDate">Start Date</label>
+            <input
+              type="date"
+              id="startDate"
+              class="form-control"
+              name="startDate"
+              [(ngModel)]="schoolDetails.startDate"
+              required />
+          </div>
+          <div class="col-md-6">
+            <label for="endDate">End Date</label>
+            <input
+              type="date"
+              id="endDate"
+              class="form-control"
+              name="endDate"
+              [(ngModel)]="schoolDetails.endDate"
+              required />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+      </form>
+    </div>
+  </div>
+</div>

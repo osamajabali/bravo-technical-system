@@ -1,0 +1,25 @@
+.paginator {
+  .p-paginator {
+    border: none;
+    background: transparent;
+
+    .p-paginator-pages .p-paginator-page.p-highlight {
+      background: var(--primary-primary-500);
+      color: white;
+    }
+
+    .p-paginator-element {
+      &:not(.p-disabled):not(.p-highlight):hover {
+        background: var(--primary-primary-100);
+      }
+    }
+  }
+  .p-paginator-first,
+  .p-paginator-last {
+    display: none !important;
+  }
+  .p-paginator-prev,
+  .p-paginator-next {
+    border: 1px solid var(--neutral-grey-200);
+  }
+}

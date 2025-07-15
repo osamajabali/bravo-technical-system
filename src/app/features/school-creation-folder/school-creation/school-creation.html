@@ -1,0 +1,47 @@
+<div class="page-container">
+  <app-custom-steps [items]="items()"
+    [activeIndex]="activeStep()"></app-custom-steps>
+
+  <div class="page-content">
+    @if (activeStep() == 0) {
+    <app-school-details />
+    }
+
+    @if (activeStep() == 1) {
+    <app-grades-and-subjects />
+    }
+
+    @if (activeStep() == 2) {
+    <app-school-admin />
+    }
+
+    @if (activeStep() == 3) {
+    <app-create-section />
+    }
+
+    @if (activeStep() == 4) {
+    <app-add-teacher />
+    }
+
+    @if (activeStep() == 5) {
+    <app-add-student />
+    }
+
+  </div>
+
+  <div class="creation-footer d-flex justify-content-between align-items-center"
+    [ngClass]="activeStep() === 0 ? 'center' : ''">
+    <div class="d-flex">
+      <!-- Previous Button -->
+    @if (activeStep() != 0) {
+        <button type="button" class="btn btn-outline-primary me-3" (click)="back()">Previous</button>
+    }
+    </div>
+
+    <div class="d-flex gap-4">
+      <!-- Next Button -->
+      <button type="button" class="btn btn-primary"
+        (click)="next()">Next</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+
+<div class="row">
+
+    <!--Image -->
+
+    <div
+        class="col-6 bg-login-right d-flex justify-content-center align-items-center">
+        <img src="../../../../assets/images/logo.png" width="45%" alt srcset>
+        <div class="bubbles">
+
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+
+        </div>
+    </div>
+
+    <!--Login-->
+    <div class="col-6 bg-login-left">
+        <div
+            class="login-container d-flex justify-content-center align-items-center flex-column">
+
+            <form class="login-form p-4 shadow rounded bg-white" AutoFormError
+                #UsersForm="ngForm" (ngSubmit)="onSubmit(UsersForm)">
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-control"
+                        name="email"
+                        [(ngModel)]="user.username"
+                        placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group position-relative mb-4"
+                    [ngClass]="false ? 'text-end' : 'text-start'">
+                    <label for="Password"
+                        class="form-label my-2 ">{{"Password"}}</label>
+                    <input
+                        [type]="showPassword ? 'text' : 'password'"
+                        class="form-control  text-black"
+                        id="passcode"
+                        name="passcode"
+                        required
+                        [(ngModel)]="user.password"
+                        [ngClass]="false ? 'text-end' : 'text-start'"
+                        [placeholder]='"PASSWORD"'>
+                    <!-- eye -->
+                    <i
+                        class="bi"
+                        [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
+                        (click)="togglePassword()"
+                        style="position: absolute; right: 15px; top: 55px; cursor: pointer; color:rgba(0, 0, 0, 0.555);">
+                    </i>
+                </div>
+
+                <button type="submit"
+                    class="btn btn-primary w-100 d-flex justify-content-center align-items-center"
+                    [disabled]="isSubmitting">
+                    <span>Login</span>
+                    <span *ngIf="isSubmitting"
+                        class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,52 @@
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4>Add Student</h4>
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="StudentFile">Upload Student Excel File</label>
+                    <input
+                        type="file"
+                        id="StudentFile"
+                        class="form-control"
+                        (change)="onFileChange($event)"
+                        accept=".xlsx, .xls"
+                        required />
+                </div>
+            </div>
+
+            <div *ngIf="validationResult" class="mb-3">
+                <div [ngClass]="{'alert alert-success': validationResult.success, 'alert alert-danger': !validationResult.success}">
+                    {{ validationResult.message }}
+                </div>
+            </div>
+
+            <!-- Table Preview -->
+            <div *ngIf="uploadedData" class="mt-3">
+                <h5>Import Preview</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Grade</th>
+                            <th>Subject</th>
+                            <th>Section</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of uploadedData()">
+                            <td>{{ row['Full Name'] }}</td>
+                            <td>{{ row['Email'] }}</td>
+                            <td>{{ row['Grade'] }}</td>
+                            <td>{{ row['Subject'] }}</td>
+                            <td>{{ row['Section'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4>Add Grades & Subjects</h4>
+    </div>
+    <div class="card-body">
+        @for (field of fields; track $index) {
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="schoolNameArabic">Section Name</label>
+                    <input
+                        type="text"
+                        id="schoolNameArabic"
+                        class="form-control"
+                        name="schoolNameArabic"
+                        required />
+                </div>
+                <div class="col-md-12 my-3">
+                    <label for="grade">Grade</label>
+                    <ng-select
+                        bindLabel="name"
+                        placeholder="Select Grade">
+                    </ng-select>
+                </div>
+                <div class="col-md-12">
+                    <label for="subject">Course</label>
+                    <ng-select
+                        bindLabel="name"
+                        placeholder="Select Course">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

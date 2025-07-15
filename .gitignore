@@ -1,0 +1,14 @@
+# Angular build output
+dist/
+.angular/cache/
+
+# Node modules
+node_modules/
+
+# Environment files (optional, if you have secrets)
+# src/environments/environment*.ts
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <h4>School Setup Wizard - Add Grades & Subjects</h4>
+  </div>
+  <div class="card-body">
+    @for (field of fields; track $index) {
+        <div class="form-group">
+      <div class="row my-2">
+        <div class="col-md-5">
+          <label for="grade">Grade</label>
+          <ng-select
+            bindLabel="name"
+            [(ngModel)]="field.grade"
+            [items]="grades()"
+            bindValue="id"
+            placeholder="Select Grade">
+          </ng-select>
+        </div>
+        <div class="col-md-5">
+          <label for="subject">Subject</label>
+          <ng-select
+            bindLabel="name"
+            [(ngModel)]="field.subject"
+            [items]="subjects"
+            bindValue="id"
+            placeholder="Select Subject">
+          </ng-select>
+        </div>
+        <div class="col-md-2">
+          @if (fields.length > 1) {
+            <button class="btn text-danger mt-4" (click)="removeField($index)">Remove Field</button>
+          }
+        </div>
+      </div>
+    </div>
+    }
+    <button class="btn text-primary" (click)="addField()">Add Fields</button>
+  </div>
+</div>

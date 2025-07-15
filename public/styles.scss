@@ -1,0 +1,77 @@
+@use "./assets/scss/variables" as vars;
+@use "./assets/scss/font-family";
+@import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+
+body {
+  font-family: "Space Grotesk", sans-serif !important;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f5f5;
+  height: 100vh;
+  overflow: hidden;
+
+  [dir="ltr"] {
+    text-align: left;
+    direction: ltr;
+  }
+
+  [dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+  }
+}
+
+/* CSS Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.p-inputtext {
+  background: var(--neutral-white) !important;
+}
+
+.p-datepicker {
+  width: 100% !important;
+}
+
+.p-select,
+.p-inputtext {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.p-button-primary {
+  background: var(--primary-primary-300) !important;
+  color: var(--primary-primary-900) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-xxs) !important;
+  padding: var(--padding-xs) var(--padding-l) !important;
+  border-radius: var(--radius-m) !important;
+  border: none !important;
+}
+
+.p-button-secondary:not(.p-dialog-close-button) {
+  background: var(--neutral-white) !important;
+  color: var(--primary-primary-900) !important;
+  border: 1px solid var(--primary-primary-900) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-xxs) !important;
+  padding: var(--padding-xs) var(--padding-l) !important;
+  border-radius: var(--radius-m) !important;
+}
+
+.p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,86 @@
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4>Add Admin, Grades & Subjects</h4>
+    </div>
+    <div class="card-body">
+        <div *ngFor="let field of fields; let i = index;">
+            <div class="form-group border p-2">
+                <div class="row my-2">
+                    <div class="col-md-3">
+                        <label for="adminNameEnglish">Admin Name (English)</label>
+                        <input
+                            type="text"
+                            id="adminNameEnglish"
+                            class="form-control"
+                            name="adminNameEnglish"
+                            [(ngModel)]="field.adminNameEnglish"
+                            required />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="adminNameArabic">Admin Name (Arabic)</label>
+                        <input
+                            type="text"
+                            id="adminNameArabic"
+                            class="form-control"
+                            name="adminNameArabic"
+                            [(ngModel)]="field.adminNameArabic"
+                            required />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="adminEmail">Admin Email</label>
+                        <input
+                            type="email"
+                            id="adminEmail"
+                            class="form-control"
+                            name="adminEmail"
+                            [(ngModel)]="field.adminEmail" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="adminPhone">Admin Phone Number</label>
+                        <input
+                            type="text"
+                            id="adminPhone"
+                            class="form-control"
+                            name="adminPhone"
+                            [(ngModel)]="field.adminPhone" />
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="col-md-6">
+                        <label for="assignedGrades">Assigned Grades</label>
+                        <ng-select
+                            id="assignedGrades"
+                            name="assignedGrades"
+                            [(ngModel)]="field.assignedGrades"
+                            bindLabel="name"
+                            placeholder="Select Grades"
+                            [multiple]="true"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="assignedSubjects">Assigned Subjects</label>
+                        <ng-select
+                            id="assignedSubjects"
+                            name="assignedSubjects"
+                            [(ngModel)]="field.assignedSubjects"
+                            bindLabel="name"
+                            placeholder="Select Subjects"
+                            [multiple]="true"
+                            required>
+                        </ng-select>
+                    </div>
+                </div>
+
+                <div *ngIf="fields.length > 1" class="row my-2">
+                    <div class="col-md-12">
+                        <button class="btn text-danger" (click)="removeField(i)">Remove Field</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn text-primary" (click)="addField()">Add Fields</button>
+    </div>
+</div>

@@ -1,0 +1,144 @@
+.side-menu {
+  width: 250px;
+  height: 100vh;
+  background-color: var(--primary-primary-50);
+  color: var(--neutral-grey-500);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+  padding: var(--padding-l);
+  text-align: center;
+}
+
+.logo {
+  max-width: 150px;
+
+  img {
+    max-width: 100%;
+  }
+  
+  .platform-name {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--neutral-grey-500);
+  }
+}
+
+.menu-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--padding-m) var(--padding-s) 0;
+}
+
+.nav-item {
+  margin-bottom: var(--sizes-4px);
+
+  &.parent {
+    padding: 0 var(--padding-s);
+    border-radius: 10px;
+    
+    &:has(.active), &:has(.expanded) {
+      background-color: var(--neutral-white);
+    }
+
+    &:has(.expanded) {
+      border-bottom: 2px solid var(--primary-primary-800);
+    }
+    
+    &:hover {
+      background-color: var(--neutral-white);
+    }
+  }
+  
+  &.has-submenu {
+    > .nav-link {
+      position: relative;
+    }
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 5px;
+  color: var(--neutral-grey-500);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  &.active {
+    background-color: var(--neutral-white);
+    color: var(--primary-primary-500);
+    font-weight: 500;
+  }
+  
+  &.expanded {
+    background-color: var(--neutral-white);
+  }
+  
+  .icon-placeholder {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .menu-text {
+    flex: 1;
+    color: var(--neutral-grey-500);
+  }
+  
+  .submenu-indicator {
+    margin-left: 10px;
+  }
+}
+
+// Apply border-radius only to parent nav links
+.parent > .nav-link {
+  border-radius: 8px;
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 0;
+  background-color: var(--neutral-white);
+  border-radius: 8px;
+  margin-top: 4px;
+  
+  .nav-item {
+    margin-bottom: 0;
+    
+    &:last-child .nav-link {
+      border-bottom: none;
+    }
+  }
+  
+  .nav-link {
+    font-size: 0.9em;
+    background-color: var(--neutral-white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: var(--padding-xs) 0;
+    padding: 12px var(--padding-s);
+
+    .menu-text {
+      color: var(--primary-primary-900);
+    }
+    
+    &.active, &:hover {
+      background-color: var(--primary-primary-50);
+      border-radius: 10px;
+      color: var(--primary-primary-900);
+    }
+  }
+}

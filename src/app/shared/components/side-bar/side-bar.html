@@ -1,0 +1,67 @@
+<div class="side-menu">
+  <div class="logo-container">
+    <!-- Logo placeholder -->
+    <div class="logo">
+      <img src="logo.svg" alt="Platform Logo" class="img-fluid" />
+    </div>
+  </div>
+
+  <nav class="menu-items">
+    <ul class="nav flex-column">
+      @for (item of menuItems; track item.label) {
+      <li
+        class="nav-item parent"
+        [class.has-submenu]="item.children && item.children!.length > 0"
+        [class.expanded]="item.expanded"
+      >
+        <a
+          [routerLink]="item.children ? null : [item.route]"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [class.active]="isActive(item)"
+          [class.expanded]="item.expanded"
+          class="nav-link xm"
+          (click)="toggleSubMenu(item)"
+        >
+          <span>
+            <img [src]="'icon-' + item.icon + '.svg'" class="me-2" />
+          </span>
+          <span class="menu-text ms-1">{{ item.label | translate }}</span>
+          @if (item.children && item.children!.length > 0) {
+          <span class="submenu-indicator">
+            <img
+              [src]="
+                item.expanded ? 'arrow-green-up.svg' : 'arrow-gray-down.svg'
+              "
+              alt="arrow"
+            />
+          </span>
+          }
+        </a>
+
+        @if (item.children && item.children!.length > 0 && item.expanded) {
+        <ul class="submenu">
+          @for (child of item.children; track child.label) {
+          <li class="nav-item">
+            <a
+              [routerLink]="['/' + child.route]"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="nav-link"
+            >
+              <span class="menu-text">{{ child.label | translate }}</span>
+              @if(('DIR'|translate) == 'rtl'){
+              <i class="pi pi-arrow-left" style="font-size: 1rem"></i>
+              }@else {
+              <i class="pi pi-arrow-right" style="font-size: 1rem"></i>
+              }
+            </a>
+          </li>
+          }
+        </ul>
+        }
+      </li>
+      }
+    </ul>
+  </nav>
+</div>

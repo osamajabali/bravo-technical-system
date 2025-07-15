@@ -1,0 +1,11 @@
+.creation-footer {
+  padding: var(--padding-m);
+  margin: 0 -16px;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--primary-primary-50);
+
+  &.center {
+    justify-content: center;
+  }
+}
