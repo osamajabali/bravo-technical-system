@@ -12,7 +12,7 @@
     }
 
     @if (activeStep() == 2) {
-    <app-school-admin />
+    <app-school-admin #schoolAdminRef (isStepValid)="isStepValid.set($event)" (stepSuccess)="onStepSuccess()" />
     }
 
     @if (activeStep() == 3) {

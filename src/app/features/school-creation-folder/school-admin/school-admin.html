@@ -3,84 +3,102 @@
         <h4>Add Admin, Grades & Subjects</h4>
     </div>
     <div class="card-body">
-        <div *ngFor="let field of fields; let i = index;">
-            <div class="form-group border p-2">
-                <div class="row my-2">
-                    <div class="col-md-3">
-                        <label for="adminNameEnglish">Admin Name (English)</label>
-                        <input
-                            type="text"
-                            id="adminNameEnglish"
-                            class="form-control"
-                            name="adminNameEnglish"
-                            [(ngModel)]="field.adminNameEnglish"
-                            required />
-                    </div>
-                    <div class="col-md-3">
-                        <label for="adminNameArabic">Admin Name (Arabic)</label>
-                        <input
-                            type="text"
-                            id="adminNameArabic"
-                            class="form-control"
-                            name="adminNameArabic"
-                            [(ngModel)]="field.adminNameArabic"
-                            required />
-                    </div>
-                    <div class="col-md-3">
-                        <label for="adminEmail">Admin Email</label>
-                        <input
-                            type="email"
-                            id="adminEmail"
-                            class="form-control"
-                            name="adminEmail"
-                            [(ngModel)]="field.adminEmail" />
-                    </div>
-                    <div class="col-md-3">
-                        <label for="adminPhone">Admin Phone Number</label>
-                        <input
-                            type="text"
-                            id="adminPhone"
-                            class="form-control"
-                            name="adminPhone"
-                            [(ngModel)]="field.adminPhone" />
-                    </div>
-                </div>
+            <form #adminForm="ngForm" AutoFormError (ngSubmit)="onSubmit()">
+            @for (field of fields(); let i = $index; track i) {
+                <div class="form-group border p-2">
+                    <div class="row my-2">
 
-                <div class="row my-2">
-                    <div class="col-md-6">
-                        <label for="assignedGrades">Assigned Grades</label>
-                        <ng-select
-                            id="assignedGrades"
-                            name="assignedGrades"
-                            [(ngModel)]="field.assignedGrades"
-                            bindLabel="name"
-                            placeholder="Select Grades"
-                            [multiple]="true"
-                            required>
-                        </ng-select>
+                        <div class="col-md-4">
+                            <label for="nameEnglishFirst{{i}}">First Name (English)</label>
+                            <input type="text" class="form-control" id="nameEnglishFirst{{i}}" name="nameEnglishFirst{{i}}" [(ngModel)]="field.nameEnglishFirst" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nameEnglishMiddle{{i}}">Middle Name (English)</label>
+                            <input type="text" class="form-control" id="nameEnglishMiddle{{i}}" name="nameEnglishMiddle{{i}}" [(ngModel)]="field.nameEnglishMiddle" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nameEnglishLast{{i}}">Last Name (English)</label>
+                            <input type="text" class="form-control" id="nameEnglishLast{{i}}" name="nameEnglishLast{{i}}" [(ngModel)]="field.nameEnglishLast" required />
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="assignedSubjects">Assigned Subjects</label>
-                        <ng-select
-                            id="assignedSubjects"
-                            name="assignedSubjects"
-                            [(ngModel)]="field.assignedSubjects"
-                            bindLabel="name"
-                            placeholder="Select Subjects"
-                            [multiple]="true"
-                            required>
-                        </ng-select>
+                    <div class="row my-2">
+                        <div class="col-md-4">
+                            <label for="nameArabicFirst{{i}}">First Name (Arabic)</label>
+                            <input type="text" class="form-control" id="nameArabicFirst{{i}}" name="nameArabicFirst{{i}}" [(ngModel)]="field.nameArabicFirst" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nameArabicMiddle{{i}}">Middle Name (Arabic)</label>
+                            <input type="text" class="form-control" id="nameArabicMiddle{{i}}" name="nameArabicMiddle{{i}}" [(ngModel)]="field.nameArabicMiddle" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nameArabicLast{{i}}">Last Name (Arabic)</label>
+                            <input type="text" class="form-control" id="nameArabicLast{{i}}" name="nameArabicLast{{i}}" [(ngModel)]="field.nameArabicLast" required />
+                        </div>
+                        <div class="col-md-4">  
+                            <label for="genderId{{i}}">Gender</label>
+                            <ng-select
+                                id="genderId{{i}}"
+                                name="genderId{{i}}"
+                                [(ngModel)]="field.genderId"
+                                bindLabel="name"
+                                bindValue="id"
+                                [items]="[
+                                    { id: 0, name: 'Select Gender' },
+                                    { id: 1, name: 'Male' },
+                                    { id: 2, name: 'Female' }
+                                ]"
+                                placeholder="Select Gender"
+                                required>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email{{i}}">Email</label>
+                            <input type="email" class="form-control" id="email{{i}}" name="email{{i}}" [(ngModel)]="field.email" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phoneNumber{{i}}">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" />
+                        </div>
                     </div>
+                    <div class="row my-2">
+                        <div class="col-md-6">
+                            <label for="assignedGrades{{i}}">Assigned Grades</label>
+                            <ng-select
+                                id="assignedGrades{{i}}"
+                                name="assignedGrades{{i}}"
+                                [(ngModel)]="field.gradeSubjects[0].gradeId"
+                                bindLabel="name"
+                                bindValue="id"
+                                [items]="grades()"
+                                placeholder="Select Grades"
+                                required>
+                            </ng-select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="assignedSubjects{{i}}">Assigned Subjects</label>
+                            <ng-select
+                                id="assignedSubjects{{i}}"
+                                name="assignedSubjects{{i}}"
+                                [(ngModel)]="field.gradeSubjects[0].subjectIds"
+                                bindLabel="name"
+                                bindValue="id"
+                                [items]="subjects()"
+                                placeholder="Select Subjects"
+                                [multiple]="true"
+                                required>
+                            </ng-select>
+                        </div>
+                    </div>
+                    @if (fields().length > 1) {
+                    <div class="row my-2">
+                        <div class="col-md-12">
+                            <button class="btn text-danger" type="button" (click)="removeField(i)">Remove Field</button>
+                        </div>
+                    </div>
+                    }
                 </div>
-
-                <div *ngIf="fields.length > 1" class="row my-2">
-                    <div class="col-md-12">
-                        <button class="btn text-danger" (click)="removeField(i)">Remove Field</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button class="btn text-primary" (click)="addField()">Add Fields</button>
+            }
+            <button class="btn text-primary" type="button" (click)="addField()">Add Admin</button>
+        </form>
     </div>
 </div>

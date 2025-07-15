@@ -29,6 +29,7 @@ export class GradesAndSubjects implements OnInit {
     this.getGrades();
     if(sessionStorage.getItem('gradesAndSubjects')){
       this.gradesAndSubjectsRequest = JSON.parse(sessionStorage.getItem('gradesAndSubjects') || '{}');
+      this.gradesAndSubjectsRequest.isUpdateStep = true;
     }
   }
   getGrades() {
@@ -64,10 +65,42 @@ export class GradesAndSubjects implements OnInit {
     if (form.invalid) {
       return;
     }
+    // Extract unique selected grade IDs
+    const selectedGradeIds = [
+      ...new Set(this.gradesAndSubjectsRequest.gradeSubjects.map(g => g.gradeId).filter(id => id !== null))
+    ];
+
+    // Map to {id, name} using grades() (find by id, not gradeId)
+    const selectedGrades = selectedGradeIds.map(id => {
+      const grade = this.grades().find(g => (g as any).id === id || g.gradeId === id);
+      // Use id if present, otherwise gradeId
+      return grade ? { id: (grade as any).id ?? grade.gradeId, name: grade.name } : null;
+    }).filter(g => g !== null);
+
+    // Extract all selected subject IDs (flattened)
+    const selectedSubjectIds = [
+      ...new Set(
+        this.gradesAndSubjectsRequest.gradeSubjects
+          .flatMap(g => g.subjectIds)
+          .filter(id => id !== null)
+      )
+    ];
+
+    // Map to {id, name} using subjects
+    const selectedSubjects = selectedSubjectIds.map(id => {
+      const subject = this.subjects.find(s => s.id === id);
+      return subject ? { id: subject.id, name: subject.name } : null;
+    }).filter(s => s !== null);
+
+    // Store in sessionStorage
+    sessionStorage.setItem('selectedGrades', JSON.stringify(selectedGrades));
+    sessionStorage.setItem('selectedSubjects', JSON.stringify(selectedSubjects));
+
     let schoolId = JSON.parse(sessionStorage.getItem('schoolDetails') || '{}').schoolId;
       const model: GradesAndSubjectsRequest = {
       schoolId: schoolId,
       stepNumber: 2,
+      isUpdateStep: this.gradesAndSubjectsRequest.isUpdateStep,
       gradeSubjects: this.gradesAndSubjectsRequest.gradeSubjects
     };
     this.schoolCreationService.addGradesAndSubjects(model).subscribe(res => {

@@ -23,6 +23,7 @@ export class SchoolCreation implements OnInit {
   actionId = ActionId;
   @ViewChild('schoolDetailsRef') schoolDetailsRef!: SchoolDetails;
   @ViewChild('gradesAndSubjectsRef') gradesAndSubjectsRef!: GradesAndSubjects;
+  @ViewChild('schoolAdminRef') schoolAdminRef!: SchoolAdmin;
   items = signal<StepItem[]>([
     {
       id: '0',
@@ -78,6 +79,12 @@ export class SchoolCreation implements OnInit {
     }
     if(this.activeStep() === 1){
       this.gradesAndSubjectsRef?.triggerValidation();
+      if (!this.isStepValid()) {
+        return;
+      }
+    }
+    if(this.activeStep() === 2){
+      this.schoolAdminRef?.triggerValidation();
       if (!this.isStepValid()) {
         return;
       }
