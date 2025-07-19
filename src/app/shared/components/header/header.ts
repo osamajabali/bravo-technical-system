@@ -64,7 +64,7 @@ export class Header {
   // Function to handle the back button action
   goBack() {
     // Implement the go back functionality, like navigating to the previous page
-    console.log('Going back...');
+
   }
 
   // Function to handle filter option selection (like subject, grade, section)
@@ -81,13 +81,13 @@ export class Header {
   // Function to apply the filter selection
   applyFilter(event: Event) {
     // Implement your filter logic here
-    console.log('Filters applied');
+
   }
 
   // Function to refresh classes when the filter popover is hidden
   refreshClasses() {
     // Any necessary logic to refresh classes or reset states
-    console.log('Refreshing classes...');
+
   }
 
   // Function to toggle between languages (for translating items)

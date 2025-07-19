@@ -23,3 +23,49 @@
 .page-content {
   padding-bottom: 90px; // Prevents content from being hidden behind the fixed footer
 }
+
+.success-container {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  .success-icon {
+    animation: fadeInScale 0.6s ease-in-out;
+  }
+  
+  h2 {
+    animation: fadeInUp 0.6s ease-in-out 0.2s both;
+  }
+  
+  p {
+    animation: fadeInUp 0.6s ease-in-out 0.4s both;
+  }
+  
+  button {
+    animation: fadeInUp 0.6s ease-in-out 0.6s both;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

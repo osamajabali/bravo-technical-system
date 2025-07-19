@@ -60,9 +60,11 @@
                     class="btn btn-primary w-100 d-flex justify-content-center align-items-center"
                     [disabled]="isSubmitting">
                     <span>Login</span>
-                    <span *ngIf="isSubmitting"
+                    @if (isSubmitting) {
+                      <span
                         class="spinner-border spinner-border-sm" role="status"
                         aria-hidden="true"></span>
+                    }
                 </button>
 
             </form>

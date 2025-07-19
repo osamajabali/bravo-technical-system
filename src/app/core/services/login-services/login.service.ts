@@ -9,6 +9,7 @@ import { Result } from '../../models/shared-models/result';
 import { AccessToken } from '../../models/login/access-token';
 import { LoginResponse } from '../../models/login/login-response.model';
 import { Permission } from '../../models/shared-models/permission.model';
+import { Configurations } from '../../models/login/configrations';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class LoginService {
 
   login = (obj: LogIn): Observable<Result<LoginResponse>> => {
     return this.apiHlpr.post<Result<any>>(`auth/login`, obj);
+  }
+
+  getConfigrations = (): Observable<Result<Configurations>> => {
+    return this.apiHlpr.post<Result<Configurations>>(`global/configuration`, null);
   }
 
   getPermission = (): Observable<Result<Permission>> => {

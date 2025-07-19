@@ -9,7 +9,7 @@
         <h5>School Basic Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="nameArabic">School Name (Arabic)</label>
+            <label for="nameArabic">School Name (Arabic) <span class="text-danger">*</span></label>
             <input
               type="text"
               id="nameArabic"
@@ -19,7 +19,7 @@
               required />
           </div>
           <div class="col-md-6">
-            <label for="nameEnglish">School Name (English)</label>
+            <label for="nameEnglish">School Name (English) <span class="text-danger">*</span></label>
             <input
               type="text"
               id="nameEnglish"
@@ -32,7 +32,7 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="countryId">Country</label>
+            <label for="countryId">Country <span class="text-danger">*</span></label>
             <ng-select
               id="countryId"
               name="countryId"
@@ -46,7 +46,7 @@
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="cityId">City</label>
+            <label for="cityId">City <span class="text-danger">*</span></label>
             <ng-select
               id="cityId"
               name="cityId"
@@ -62,7 +62,7 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="organizationId">Organization</label>
+            <label for="organizationId">Organization <span class="text-danger">*</span></label>
             <ng-select
               id="organizationId"
               name="organizationId"
@@ -86,7 +86,7 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="latitude">Latitude</label>
+            <label for="latitude">Latitude <span class="text-danger">*</span></label>
             <input
               type="text"
               id="latitude"
@@ -96,7 +96,7 @@
               required />
           </div>
           <div class="col-md-6">
-            <label for="longitude">Longitude</label>
+            <label for="longitude">Longitude <span class="text-danger">*</span></label>
             <input
               type="text"
               id="longitude"
@@ -130,7 +130,7 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="accountOwnerId">School Account Owner</label>
+            <label for="accountOwnerId">School Account Owner <span class="text-danger">*</span></label>
             <ng-select
               id="accountOwnerId"
               name="accountOwnerId"
@@ -155,7 +155,7 @@
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="systemStatusId">School Status</label>
+            <label for="systemStatusId">School Status <span class="text-danger">*</span></label>
             <ng-select
               id="systemStatusId"
               name="systemStatusId"
@@ -175,7 +175,7 @@
         <h5>Contact Person Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="contactPersonName">Contact Person Full Name</label>
+            <label for="contactPersonName">Contact Person Full Name <span class="text-danger">*</span></label>
             <input
               type="text"
               id="contactPersonName"
@@ -185,7 +185,7 @@
               required />
           </div>
           <div class="col-md-6">
-            <label for="contactPersonEmail">Email</label>
+            <label for="contactPersonEmail">Email <span class="text-danger">*</span></label>
             <input
               type="email"
               id="contactPersonEmail"
@@ -214,7 +214,7 @@
         <h5>School Academic Date</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="accountOwnerId">School Academic Year</label>
+            <label for="accountOwnerId">School Academic Year <span class="text-danger">*</span></label>
             <ng-select
               id="accountOwnerId"
               name="accountOwnerId"
@@ -227,7 +227,7 @@
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="startDate">Start Date</label>
+            <label for="startDate">Start Date <span class="text-danger">*</span></label>
             <input
               type="date"
               id="startDate"
@@ -237,7 +237,7 @@
               required />
           </div>
           <div class="col-md-6">
-            <label for="endDate">End Date</label>
+            <label for="endDate">End Date <span class="text-danger">*</span></label>
             <input
               type="date"
               id="endDate"
@@ -245,6 +245,27 @@
               name="endDate"
               [(ngModel)]="schoolDetails.endDate"
               required />
+          </div>
+        </div>
+
+        <hr class="mt-4">
+        <h5>Course Type</h5>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="courseType" id="bravoSystem" [value]="1" [(ngModel)]="courseType">
+              <label class="form-check-label" for="bravoSystem">
+                Bravo System
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="courseType" id="unitSystem" [value]="2" [(ngModel)]="courseType">
+              <label class="form-check-label" for="unitSystem">
+                Unit System
+              </label>
+            </div>
           </div>
         </div>
       </form>

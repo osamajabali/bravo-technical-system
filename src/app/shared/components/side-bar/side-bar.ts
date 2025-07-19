@@ -17,55 +17,9 @@ export class SideBar {
 
   menuItems: MenuItem[] = [
     {
-      label: 'QUICK_ACTIONS',
-      route: 'fd',
-      icon: 'quick-actions'
-    },
-    {
-      label: 'SKILLS',
-      route: '',
-      icon: 'skills',
-      expanded: false,
-      children: [
-        {
-          label: 'SEMESTERS',
-          route: 'features/semesters',
-          icon: 'cubes'
-        },
-        {
-          label: 'ALL_SKILLS',
-          route: 'RouteNames.ALL_SKILLS',
-          icon: 'list'
-        }
-      ]
-    },
-    {
-      label: 'LEARN',
-      route: '/ds',
-      icon: 'learn',
-      expanded: false,
-      children: [
-        {
-          label: 'ASSIGNMENTS',
-          route: '/features/assignments',
-          icon: 'tasks'
-        },
-        {
-          label: 'EXAMS',
-          route: '/features/exams',
-          icon: 'file-alt'
-        }
-      ]
-    },
-    {
-      label: 'STUDENTS',
-      route: 'RouteNames.STUDENTS',
-      icon: 'students'
-    },
-    {
-      label: 'LEVELED_READING',
-      route: '/features/leveled-reading',
-      icon: 'leveled-reading'
+      label: 'School Creation',
+      route: '/features/school-creation',
+      icon: 'building-add'
     },
   ];
 

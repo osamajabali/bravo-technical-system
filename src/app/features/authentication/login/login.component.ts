@@ -34,11 +34,15 @@ export class LoginComponent {
 				this.isSubmitting = false;
 				this.loginService.setUser(response.data.token);
 				localStorage.setItem('userName', response.data.fullName);
+				this.loginService.getConfigrations().subscribe(response => {
+					if (response.success) {
+						localStorage.setItem('configrations', JSON.stringify(response.data));
+					}
+				})
 				this.router.navigate(['/features'])
 			}
 			else {
 				this.isSubmitting = false;
-				console.log('WRONG_EMAIL_OR_PASSWORD')
 			}
 		}
 		)

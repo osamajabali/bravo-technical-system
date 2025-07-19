@@ -37,8 +37,8 @@ body {
 }
 
 .form-check-input:checked{
-  background-color: green !important;
-  border-color: rgb(16, 182, 16) !important;
+  background-color: var(--primary-primary-600) !important;
+  border-color: var(--primary-primary-600) !important;
 }
 }
 

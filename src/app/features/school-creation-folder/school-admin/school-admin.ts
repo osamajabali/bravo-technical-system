@@ -6,6 +6,7 @@ import { LookupItem } from '../../../core/models/shared-models/lookup-item.model
 import { Admin, AdminsRequest } from '../../../core/models/school-creation/admin.model';
 import { SchoolCreationService } from '../../../core/services/school-creation/school-creation.service';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
+import { LoaderService } from '../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-school-admin',
@@ -19,6 +20,7 @@ export class SchoolAdmin implements OnInit {
   grades = signal<LookupItem[]>([]);
   subjects = signal<LookupItem[]>([]);
   schoolCreationService = inject(SchoolCreationService);
+  loaderService = inject(LoaderService);
   stepSuccess = output<void>();
   isStepValid = output<boolean>();
   // Each admin field is of type Admin, but with UI helpers for selection
@@ -75,10 +77,22 @@ export class SchoolAdmin implements OnInit {
       admins: this.fields()
     };
 
-    this.schoolCreationService.addAdmins(model).subscribe(res => {
-      if (res.success) {
-        sessionStorage.setItem('admins', JSON.stringify(model));
-        this.stepSuccess.emit();
+    // Show loader
+    this.loaderService.showStepLoader(2);
+
+    this.schoolCreationService.addAdmins(model).subscribe({
+      next: (res) => {
+        if (res.success) {
+          sessionStorage.setItem('admins', JSON.stringify(model));
+          this.stepSuccess.emit();
+        }
+        // Hide loader
+        this.loaderService.hide();
+      },
+      error: (error) => {
+        // Hide loader on error
+        this.loaderService.hide();
+        console.error('Error adding school admins:', error);
       }
     });
   }

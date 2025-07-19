@@ -8,7 +8,7 @@
           <div class="form-group">
         <div class="row my-2">
           <div class="col-md-5">
-            <label for="grade">Grade</label>
+            <label for="grade">Grade <span class="text-danger">*</span></label>
             <ng-select
               bindLabel="name"
               [(ngModel)]="field.gradeId"
@@ -20,7 +20,7 @@
             </ng-select>
           </div>
           <div class="col-md-5">
-            <label for="subject">Subject</label>
+            <label for="subject">Subject <span class="text-danger">*</span></label>
             <ng-select
               multiple="true"
               selectableGroup="true"

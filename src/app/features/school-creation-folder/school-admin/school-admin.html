@@ -9,33 +9,33 @@
                     <div class="row my-2">
 
                         <div class="col-md-4">
-                            <label for="nameEnglishFirst{{i}}">First Name (English)</label>
+                            <label for="nameEnglishFirst{{i}}">First Name (English) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameEnglishFirst{{i}}" name="nameEnglishFirst{{i}}" [(ngModel)]="field.nameEnglishFirst" required />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameEnglishMiddle{{i}}">Middle Name (English)</label>
+                            <label for="nameEnglishMiddle{{i}}">Middle Name (English) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameEnglishMiddle{{i}}" name="nameEnglishMiddle{{i}}" [(ngModel)]="field.nameEnglishMiddle" required />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameEnglishLast{{i}}">Last Name (English)</label>
+                            <label for="nameEnglishLast{{i}}">Last Name (English) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameEnglishLast{{i}}" name="nameEnglishLast{{i}}" [(ngModel)]="field.nameEnglishLast" required />
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-md-4">
-                            <label for="nameArabicFirst{{i}}">First Name (Arabic)</label>
+                            <label for="nameArabicFirst{{i}}">First Name (Arabic) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameArabicFirst{{i}}" name="nameArabicFirst{{i}}" [(ngModel)]="field.nameArabicFirst" required />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameArabicMiddle{{i}}">Middle Name (Arabic)</label>
+                            <label for="nameArabicMiddle{{i}}">Middle Name (Arabic) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameArabicMiddle{{i}}" name="nameArabicMiddle{{i}}" [(ngModel)]="field.nameArabicMiddle" required />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameArabicLast{{i}}">Last Name (Arabic)</label>
+                            <label for="nameArabicLast{{i}}">Last Name (Arabic) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nameArabicLast{{i}}" name="nameArabicLast{{i}}" [(ngModel)]="field.nameArabicLast" required />
                         </div>
                         <div class="col-md-4">  
-                            <label for="genderId{{i}}">Gender</label>
+                            <label for="genderId{{i}}">Gender <span class="text-danger">*</span></label>
                             <ng-select
                                 id="genderId{{i}}"
                                 name="genderId{{i}}"
@@ -52,17 +52,17 @@
                             </ng-select>
                         </div>
                         <div class="col-md-4">
-                            <label for="email{{i}}">Email</label>
+                            <label for="email{{i}}">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email{{i}}" name="email{{i}}" [(ngModel)]="field.email" required />
                         </div>
                         <div class="col-md-4">
-                            <label for="phoneNumber{{i}}">Phone Number</label>
-                            <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" />
+                            <label for="phoneNumber{{i}}">Phone Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" required />
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-md-6">
-                            <label for="assignedGrades{{i}}">Assigned Grades</label>
+                            <label for="assignedGrades{{i}}">Assigned Grades <span class="text-danger">*</span></label>
                             <ng-select
                                 id="assignedGrades{{i}}"
                                 name="assignedGrades{{i}}"
@@ -75,7 +75,7 @@
                             </ng-select>
                         </div>
                         <div class="col-md-6">
-                            <label for="assignedSubjects{{i}}">Assigned Subjects</label>
+                            <label for="assignedSubjects{{i}}">Assigned Subjects <span class="text-danger">*</span></label>
                             <ng-select
                                 id="assignedSubjects{{i}}"
                                 name="assignedSubjects{{i}}"

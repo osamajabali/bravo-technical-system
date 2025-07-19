@@ -24,7 +24,7 @@
           (click)="toggleSubMenu(item)"
         >
           <span>
-            <img [src]="'icon-' + item.icon + '.svg'" class="me-2" />
+            <i class="bi bi-{{item.icon}} mx-2 h4"></i>
           </span>
           <span class="menu-text ms-1">{{ item.label | translate }}</span>
           @if (item.children && item.children!.length > 0) {

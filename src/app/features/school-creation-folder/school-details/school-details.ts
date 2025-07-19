@@ -6,6 +6,7 @@ import { AddSchoolDetailsRequest } from '../../../core/models/school-creation/ad
 import { LookUps } from '../../../core/services/look-ups.service';
 import { City } from '../../../core/models/shared-models/city.model';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
+import { LoaderService } from '../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-school-details',
@@ -17,10 +18,12 @@ export class SchoolDetails implements OnInit {
   schoolCreationService = inject(SchoolCreationService);
   lookUpsService = inject(LookUps);
   lookUps = inject(LookUps).lookups;
+  loaderService = inject(LoaderService);
   schoolDetails: AddSchoolDetailsRequest = new AddSchoolDetailsRequest();
   cities = signal<City[]>([]);
   isStepValid = output<boolean>();
   stepSuccess = output<void>();
+  courseType: number = 1;
   @ViewChild('schoolForm', { read: ElementRef }) schoolFormRef!: ElementRef<HTMLFormElement>;
 
   ngOnInit(): void {
@@ -35,14 +38,28 @@ export class SchoolDetails implements OnInit {
     if (form.invalid) {
       return;
     }
+    
+    // Show loader
+    this.loaderService.showStepLoader(0);
+    
     this.schoolDetails.schoolId = 0;
     this.schoolDetails.stepNumber = 1;
     const formData = this.toFormData(this.schoolDetails);
-    this.schoolCreationService.addSchoolDetails(formData).subscribe((res) => {
-      if (res.success) {
-        this.schoolDetails.schoolId = res.data.newSchoolId;
-        sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails));
-        this.stepSuccess.emit();
+    this.schoolCreationService.addSchoolDetails(formData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.schoolDetails.schoolId = res.data.newSchoolId;
+          sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails));
+          sessionStorage.setItem('courseType',  this.courseType.toString());
+          this.stepSuccess.emit();
+        }
+        // Hide loader
+        this.loaderService.hide();
+      },
+      error: (error) => {
+        // Hide loader on error
+        this.loaderService.hide();
+        console.error('Error saving school details:', error);
       }
     });
   }

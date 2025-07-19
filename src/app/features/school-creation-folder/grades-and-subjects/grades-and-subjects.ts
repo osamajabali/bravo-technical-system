@@ -7,6 +7,7 @@ import { Grade } from '../../../core/models/header-models/header.model';
 import { SchoolCreationService } from '../../../core/services/school-creation/school-creation.service';
 import { GradesAndSubjectsRequest } from '../../../core/models/school-creation/grades-and-subjects.model';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
+import { LoaderService } from '../../../shared/services/loader.service';
 
 @Component({
   selector: 'app-grades-and-subjects',
@@ -17,6 +18,7 @@ import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-err
 export class GradesAndSubjects implements OnInit {
   lookUpsService = inject(LookUps);
   schoolCreationService = inject(SchoolCreationService);
+  loaderService = inject(LoaderService);
   gradesAndSubjectsRequest: GradesAndSubjectsRequest = new GradesAndSubjectsRequest();
   grades = signal<Grade[]>([]);
   subjects = inject(LookUps).lookups().subjects;
@@ -103,10 +105,23 @@ export class GradesAndSubjects implements OnInit {
       isUpdateStep: this.gradesAndSubjectsRequest.isUpdateStep,
       gradeSubjects: this.gradesAndSubjectsRequest.gradeSubjects
     };
-    this.schoolCreationService.addGradesAndSubjects(model).subscribe(res => {
-      if (res.success) {
-        sessionStorage.setItem('gradesAndSubjects', JSON.stringify(model));
-        this.stepSuccess.emit();
+    
+    // Show loader
+    this.loaderService.showStepLoader(1);
+    
+    this.schoolCreationService.addGradesAndSubjects(model).subscribe({
+      next: (res) => {
+        if (res.success) {
+          sessionStorage.setItem('gradesAndSubjects', JSON.stringify(model));
+          this.stepSuccess.emit();
+        }
+        // Hide loader
+        this.loaderService.hide();
+      },
+      error: (error) => {
+        // Hide loader on error
+        this.loaderService.hide();
+        console.error('Error saving grades and subjects:', error);
       }
     });
   }
