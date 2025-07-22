@@ -7,10 +7,14 @@ import { LookUps } from '../../../core/services/look-ups.service';
 import { City } from '../../../core/models/shared-models/city.model';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
 import { LoaderService } from '../../../shared/services/loader.service';
+import { RestrictNonNumericDirective } from '../../../shared/directives/restrict-non-numeric.directive';
+import { NoLeadingSpaceDirective } from '../../../shared/directives/no-leading-space.directive';
+import { NgSelectCloseOnOtherClearDirective } from '../../../shared/directives/ng-select-close-on-other-clear.directive';
+import { AutoOpenDatePickerDirective } from '../../../shared/directives/auto-open-date-picker.directive';
 
 @Component({
   selector: 'app-school-details',
-  imports: [FormsModule, NgSelectModule, AutoFormErrorDirective],
+  imports: [FormsModule, NgSelectModule, AutoFormErrorDirective, RestrictNonNumericDirective, NoLeadingSpaceDirective, NgSelectCloseOnOtherClearDirective, AutoOpenDatePickerDirective],
   templateUrl: './school-details.html',
   styleUrl: './school-details.scss'
 })
@@ -19,17 +23,24 @@ export class SchoolDetails implements OnInit {
   lookUpsService = inject(LookUps);
   lookUps = inject(LookUps).lookups;
   loaderService = inject(LoaderService);
-  schoolDetails: AddSchoolDetailsRequest = new AddSchoolDetailsRequest();
+  schoolDetails = signal<AddSchoolDetailsRequest>(new AddSchoolDetailsRequest());
   cities = signal<City[]>([]);
   isStepValid = output<boolean>();
   stepSuccess = output<void>();
   courseType: number = 1;
+  schoolLogoPreviewUrl = signal<string | null>(null);
+  private logoBlobUrl: string | null = null;
   @ViewChild('schoolForm', { read: ElementRef }) schoolFormRef!: ElementRef<HTMLFormElement>;
 
   ngOnInit(): void {
     if(sessionStorage.getItem('schoolDetails')){
-      this.schoolDetails = JSON.parse(sessionStorage.getItem('schoolDetails') || '{}');
+      this.schoolDetails.set(JSON.parse(sessionStorage.getItem('schoolDetails') || '{}'));
       this.getCities();
+      this.courseType = parseInt(sessionStorage.getItem('courseType') || '1');
+      // Set preview if logoUrl exists
+      if (this.schoolDetails().logoUrl) {
+        this.schoolLogoPreviewUrl.set(this.schoolDetails().logoUrl);
+      }
     }
   }
 
@@ -42,14 +53,14 @@ export class SchoolDetails implements OnInit {
     // Show loader
     this.loaderService.showStepLoader(0);
     
-    this.schoolDetails.schoolId = 0;
-    this.schoolDetails.stepNumber = 1;
-    const formData = this.toFormData(this.schoolDetails);
+    this.schoolDetails().schoolId = 0;
+    this.schoolDetails().stepNumber = 1;
+    const formData = this.toFormData(this.schoolDetails());
     this.schoolCreationService.addSchoolDetails(formData).subscribe({
       next: (res) => {
         if (res.success) {
-          this.schoolDetails.schoolId = res.data.newSchoolId;
-          sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails));
+          this.schoolDetails().schoolId = res.data.newSchoolId;
+          sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails()));
           sessionStorage.setItem('courseType',  this.courseType.toString());
           this.stepSuccess.emit();
         }
@@ -70,6 +81,29 @@ export class SchoolDetails implements OnInit {
     }
   }
 
+  onLogoFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.schoolDetails().logo = file;
+      // Clean up previous blob URL
+      if (this.logoBlobUrl) {
+        URL.revokeObjectURL(this.logoBlobUrl);
+      }
+      const url = URL.createObjectURL(file);
+      this.logoBlobUrl = url;
+      this.schoolLogoPreviewUrl.set(url);
+      this.schoolDetails().logoUrl = url;
+    }
+    // If user cancels, do not clear preview or file
+  }
+
+  ngOnDestroy() {
+    if (this.logoBlobUrl) {
+      URL.revokeObjectURL(this.logoBlobUrl);
+    }
+  }
+
   toFormData(model: AddSchoolDetailsRequest): FormData {
     const formData = new FormData();
     Object.entries(model).forEach(([key, value]) => {
@@ -81,7 +115,7 @@ export class SchoolDetails implements OnInit {
   }
 
   getCities() {
-    this.lookUpsService.getCities(this.schoolDetails.countryId).subscribe((res) => {
+    this.lookUpsService.getCities(this.schoolDetails().countryId).subscribe((res) => {
       if (res.success) {
         this.cities.set(res.data);
       }

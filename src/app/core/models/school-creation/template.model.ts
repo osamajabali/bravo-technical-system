@@ -7,3 +7,9 @@ export class AddTemplate {
     teachersExcel?: File;
     studentsExcel?: File;
 }
+export class ValidateTemplate {
+    schoolId: number;
+    courseType: number;
+    excelType: number;
+    excelFile: File;
+}

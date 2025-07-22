@@ -6,21 +6,24 @@
     <form #gradesAndSubjectsForm="ngForm" AutoFormError (ngSubmit)="submitGradesAndSubjects(gradesAndSubjectsForm)">
       @for (field of gradesAndSubjectsRequest.gradeSubjects; track $index) {
           <div class="form-group">
-        <div class="row my-2">
+        <div class="row my-2 align-items-center">
           <div class="col-md-5">
-            <label for="grade">Grade <span class="text-danger">*</span></label>
+            <label class="text-primary" for="grade">Grade <span class="text-danger">*</span></label>
             <ng-select
               bindLabel="name"
               [(ngModel)]="field.gradeId"
-              [items]="grades()"
+              [items]="filteredGrades()"
               bindValue="id"
+              [clearable]="false"
               placeholder="Select Grade"
               name="grade{{$index}}"
-              required>
+              (ngModelChange)="onGradeChange($event , $index)"
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
-          <div class="col-md-5">
-            <label for="subject">Subject <span class="text-danger">*</span></label>
+          <div class="col-md-6">
+            <label class="text-primary" for="subject">Subject <span class="text-danger">*</span></label>
             <ng-select
               multiple="true"
               selectableGroup="true"
@@ -30,18 +33,25 @@
               placeholder="Select Subject"
               name="subject{{$index}}"
               bindValue="id"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-1 d-flex align-items-center justify-content-center mt-4">
             @if (gradesAndSubjectsRequest.gradeSubjects.length > 1) {
-              <button class="btn text-danger mt-4" type="button" (click)="removeField($index)">Remove Field</button>
+              <button class="btn p-0 m-0" type="button" (click)="removeField($index)" title="Remove Field">
+                <i class="bi bi-trash text-danger h5"></i>
+              </button>
+            }
+            @if ($index === gradesAndSubjectsRequest.gradeSubjects.length - 1) {
+              <button class="btn p-0 m-0 ms-2" type="button" (click)="addField()" title="Add Field">
+                <i class="bi bi-plus-circle text-primary h5"></i>
+              </button>
             }
           </div>
         </div>
       </div>
       }
-      <button class="btn text-primary" (click)="addField()">Add Fields</button>
     </form>
   </div>
 </div>

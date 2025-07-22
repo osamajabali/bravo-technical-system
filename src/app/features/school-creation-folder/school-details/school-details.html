@@ -9,162 +9,188 @@
         <h5>School Basic Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="nameArabic">School Name (Arabic) <span class="text-danger">*</span></label>
+            <label class="text-primary" for="nameArabic">School Name (Arabic) <span class="text-danger">*</span></label>
             <input
               type="text"
               id="nameArabic"
               class="form-control"
               name="nameArabic"
-              [(ngModel)]="schoolDetails.nameArabic"
-              required />
+              [(ngModel)]="schoolDetails().nameArabic"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
           <div class="col-md-6">
-            <label for="nameEnglish">School Name (English) <span class="text-danger">*</span></label>
+            <label class="text-primary" for="nameEnglish">School Name (English) <span class="text-danger">*</span></label>
             <input
               type="text"
               id="nameEnglish"
               class="form-control"
               name="nameEnglish"
-              [(ngModel)]="schoolDetails.nameEnglish"
-              required />
+              [(ngModel)]="schoolDetails().nameEnglish"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="countryId">Country <span class="text-danger">*</span></label>
+            <label class="text-primary" for="countryId">Country <span class="text-danger">*</span></label>
             <ng-select
               id="countryId"
               name="countryId"
-              [(ngModel)]="schoolDetails.countryId"
+              [(ngModel)]="schoolDetails().countryId"
               [items]="lookUps().countries"
-              (ngModelChange)="getCities()"
+              (ngModelChange)="getCities();this.schoolDetails().cityId = null;"
               bindLabel="name"
               bindValue="id"
               placeholder="Select Country"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="cityId">City <span class="text-danger">*</span></label>
+            <label class="text-primary" for="cityId">City <span class="text-danger">*</span></label>
             <ng-select
               id="cityId"
               name="cityId"
-              [(ngModel)]="schoolDetails.cityId"
+              [(ngModel)]="schoolDetails().cityId"
               [items]="cities()"
               bindLabel="name"
               bindValue="id"
               placeholder="Select City"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="organizationId">Organization <span class="text-danger">*</span></label>
+            <label class="text-primary" for="organizationId">Organization <span class="text-danger">*</span></label>
             <ng-select
               id="organizationId"
               name="organizationId"
-              [(ngModel)]="schoolDetails.organizationId"
+              [(ngModel)]="schoolDetails().organizationId"
               [items]="lookUps().organizations"
               bindLabel="name"
               bindValue="id"
               placeholder="Select Organization"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="address">Address</label>
+            <label class="text-primary" for="address">Address</label>
             <textarea
               id="address"
               class="form-control"
               name="address"
-              [(ngModel)]="schoolDetails.address"></textarea>
+              autocomplete="off"
+              [(ngModel)]="schoolDetails().address"
+              noLeadingSpace></textarea>
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="latitude">Latitude <span class="text-danger">*</span></label>
-            <input
+            <label class="text-primary" for="latitude">Latitude <span class="text-danger">*</span></label>
+            <input appRestrictNonNumeric
               type="text"
               id="latitude"
               class="form-control"
               name="latitude"
-              [(ngModel)]="schoolDetails.latitude"
-              required />
+              [(ngModel)]="schoolDetails().latitude"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
           <div class="col-md-6">
-            <label for="longitude">Longitude <span class="text-danger">*</span></label>
-            <input
+            <label class="text-primary" for="longitude">Longitude <span class="text-danger">*</span></label>
+            <input appRestrictNonNumeric
               type="text"
               id="longitude"
               class="form-control"
               name="longitude"
-              [(ngModel)]="schoolDetails.longitude"
-              required />
+              [(ngModel)]="schoolDetails().longitude"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="websiteUrl">Website URL</label>
+            <label class="text-primary" for="websiteUrl">Website URL</label>
             <input
               type="url"
               id="websiteUrl"
               class="form-control"
               name="websiteUrl"
-              [(ngModel)]="schoolDetails.websiteUrl" />
+              [(ngModel)]="schoolDetails().websiteUrl"
+              noLeadingSpace />
           </div>
           <div class="col-md-6">
-            <label for="logo">School Logo</label>
+            <label class="text-primary" for="logo">School Logo</label>
             <input
               type="file"
               id="logo"
               class="form-control"
               name="logo"
-              (change)="schoolDetails.logo = $any($event.target).files[0]" />
+              (change)="onLogoFileChange($event);"
+              accept="image/*"
+              noLeadingSpace />
+            @if (schoolLogoPreviewUrl()) {
+              <div style="margin-top: 10px;">
+                <img [src]="schoolLogoPreviewUrl()" alt="School Logo Preview" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 5px;" />
+                <a [href]="schoolLogoPreviewUrl()" target="_blank">View Full Image</a>
+              </div>
+            }
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="accountOwnerId">School Account Owner <span class="text-danger">*</span></label>
+            <label class="text-primary" for="accountOwnerId">School Account Owner <span class="text-danger">*</span></label>
             <ng-select
               id="accountOwnerId"
               name="accountOwnerId"
-              [(ngModel)]="schoolDetails.accountOwnerId"
+              [(ngModel)]="schoolDetails().accountOwnerId"
               [items]="lookUps().owners"
               bindLabel="name"
               bindValue="id"
               placeholder="Select Account Owner"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="contractExpiryDate">Contract Expiry Date</label>
+            <label class="text-primary" for="contractExpiryDate">Contract Expiry Date</label>
             <input
               type="date"
+              autoOpenDatePicker
               id="contractExpiryDate"
               class="form-control"
               name="contractExpiryDate"
-              [(ngModel)]="schoolDetails.contractExpiryDate" />
+              [(ngModel)]="schoolDetails().contractExpiryDate"
+              noLeadingSpace />
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="systemStatusId">School Status <span class="text-danger">*</span></label>
+            <label class="text-primary" for="systemStatusId">School Status <span class="text-danger">*</span></label>
             <ng-select
               id="systemStatusId"
               name="systemStatusId"
-              [(ngModel)]="schoolDetails.systemStatusId"
+              [(ngModel)]="schoolDetails().systemStatusId"
               [items]="lookUps().statuses"
               bindLabel="name"
               bindValue="id"
               placeholder="Select Status"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
         </div>
@@ -175,36 +201,42 @@
         <h5>Contact Person Information</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="contactPersonName">Contact Person Full Name <span class="text-danger">*</span></label>
+            <label class="text-primary" for="contactPersonName">Contact Person Full Name <span class="text-danger">*</span></label>
             <input
               type="text"
               id="contactPersonName"
               class="form-control"
               name="contactPersonName"
-              [(ngModel)]="schoolDetails.contactPersonName"
-              required />
+              [(ngModel)]="schoolDetails().contactPersonName"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
           <div class="col-md-6">
-            <label for="contactPersonEmail">Email <span class="text-danger">*</span></label>
+            <label class="text-primary" for="contactPersonEmail">Email <span class="text-danger">*</span></label>
             <input
               type="email"
               id="contactPersonEmail"
               class="form-control"
               name="contactPersonEmail"
-              [(ngModel)]="schoolDetails.contactPersonEmail"
-              required />
+              [(ngModel)]="schoolDetails().contactPersonEmail"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="contactPersonPhone">Phone Number</label>
+            <label class="text-primary" for="contactPersonPhone">Phone Number</label>
             <input
               type="text"
               id="contactPersonPhone"
               class="form-control"
               name="contactPersonPhone"
-              [(ngModel)]="schoolDetails.contactPersonPhone" />
+              [(ngModel)]="schoolDetails().contactPersonPhone"
+              autocomplete="off"
+              noLeadingSpace />
           </div>
         </div>
         
@@ -214,37 +246,44 @@
         <h5>School Academic Date</h5>
         <div class="row mb-3">
           <div class="col-md-6">
-            <label for="accountOwnerId">School Academic Year <span class="text-danger">*</span></label>
+            <label class="text-primary" for="accountOwnerId">School Academic Year <span class="text-danger">*</span></label>
             <ng-select
               id="accountOwnerId"
               name="accountOwnerId"
               [items]="lookUps().academicYears"
-              [(ngModel)]="schoolDetails.academicYearId"
+              [(ngModel)]="schoolDetails().academicYearId"
               bindLabel="name"
               bindValue="id"
               placeholder="Select Account Owner"
-              required>
+              required
+              ngSelectCloseOnOtherClear>
             </ng-select>
           </div>
           <div class="col-md-6">
-            <label for="startDate">Start Date <span class="text-danger">*</span></label>
+            <label class="text-primary" for="startDate">Start Date <span class="text-danger">*</span></label>
             <input
               type="date"
+              autoOpenDatePicker
               id="startDate"
               class="form-control"
               name="startDate"
-              [(ngModel)]="schoolDetails.startDate"
-              required />
+              [(ngModel)]="schoolDetails().startDate"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
           <div class="col-md-6">
-            <label for="endDate">End Date <span class="text-danger">*</span></label>
+            <label class="text-primary" for="endDate">End Date <span class="text-danger">*</span></label>
             <input
               type="date"
+              autoOpenDatePicker
               id="endDate"
               class="form-control"
               name="endDate"
-              [(ngModel)]="schoolDetails.endDate"
-              required />
+              [(ngModel)]="schoolDetails().endDate"
+              required
+              autocomplete="off"
+              noLeadingSpace />
           </div>
         </div>
 

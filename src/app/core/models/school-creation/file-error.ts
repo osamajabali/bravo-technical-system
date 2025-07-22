@@ -1,6 +1,7 @@
 export class FileError {
     isSuccess: boolean;
     errors: ErrorDetail[];
+    excelFileName : string;
   }
   
   export class ErrorDetail {

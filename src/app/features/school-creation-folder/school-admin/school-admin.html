@@ -9,33 +9,33 @@
                     <div class="row my-2">
 
                         <div class="col-md-4">
-                            <label for="nameEnglishFirst{{i}}">First Name (English) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameEnglishFirst{{i}}" name="nameEnglishFirst{{i}}" [(ngModel)]="field.nameEnglishFirst" required />
+                            <label class="text-primary" for="nameEnglishFirst{{i}}">First Name (English) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameEnglishFirst{{i}}" name="nameEnglishFirst{{i}}" [(ngModel)]="field.nameEnglishFirst" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameEnglishMiddle{{i}}">Middle Name (English) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameEnglishMiddle{{i}}" name="nameEnglishMiddle{{i}}" [(ngModel)]="field.nameEnglishMiddle" required />
+                            <label class="text-primary" for="nameEnglishMiddle{{i}}">Middle Name (English) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameEnglishMiddle{{i}}" name="nameEnglishMiddle{{i}}" [(ngModel)]="field.nameEnglishMiddle" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameEnglishLast{{i}}">Last Name (English) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameEnglishLast{{i}}" name="nameEnglishLast{{i}}" [(ngModel)]="field.nameEnglishLast" required />
+                            <label class="text-primary" for="nameEnglishLast{{i}}">Last Name (English) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameEnglishLast{{i}}" name="nameEnglishLast{{i}}" [(ngModel)]="field.nameEnglishLast" required noLeadingSpace />
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-md-4">
-                            <label for="nameArabicFirst{{i}}">First Name (Arabic) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameArabicFirst{{i}}" name="nameArabicFirst{{i}}" [(ngModel)]="field.nameArabicFirst" required />
+                            <label class="text-primary" for="nameArabicFirst{{i}}">First Name (Arabic) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameArabicFirst{{i}}" name="nameArabicFirst{{i}}" [(ngModel)]="field.nameArabicFirst" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameArabicMiddle{{i}}">Middle Name (Arabic) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameArabicMiddle{{i}}" name="nameArabicMiddle{{i}}" [(ngModel)]="field.nameArabicMiddle" required />
+                            <label class="text-primary" for="nameArabicMiddle{{i}}">Middle Name (Arabic) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameArabicMiddle{{i}}" name="nameArabicMiddle{{i}}" [(ngModel)]="field.nameArabicMiddle" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">
-                            <label for="nameArabicLast{{i}}">Last Name (Arabic) <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nameArabicLast{{i}}" name="nameArabicLast{{i}}" [(ngModel)]="field.nameArabicLast" required />
+                            <label class="text-primary" for="nameArabicLast{{i}}">Last Name (Arabic) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nameArabicLast{{i}}" name="nameArabicLast{{i}}" [(ngModel)]="field.nameArabicLast" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">  
-                            <label for="genderId{{i}}">Gender <span class="text-danger">*</span></label>
+                            <label class="text-primary" for="genderId{{i}}">Gender <span class="text-danger">*</span></label>
                             <ng-select
                                 id="genderId{{i}}"
                                 name="genderId{{i}}"
@@ -48,53 +48,63 @@
                                     { id: 2, name: 'Female' }
                                 ]"
                                 placeholder="Select Gender"
-                                required>
+                                required
+                                ngSelectCloseOnOtherClear>
                             </ng-select>
                         </div>
                         <div class="col-md-4">
-                            <label for="email{{i}}">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email{{i}}" name="email{{i}}" [(ngModel)]="field.email" required />
+                            <label class="text-primary" for="email{{i}}">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email{{i}}" name="email{{i}}" [(ngModel)]="field.email" required noLeadingSpace />
                         </div>
                         <div class="col-md-4">
-                            <label for="phoneNumber{{i}}">Phone Number <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" required />
+                            <label class="text-primary" for="phoneNumber{{i}}">Phone Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" required noLeadingSpace />
                         </div>
                     </div>
-                    <div class="row my-2">
-                        <div class="col-md-6">
-                            <label for="assignedGrades{{i}}">Assigned Grades <span class="text-danger">*</span></label>
-                            <ng-select
-                                id="assignedGrades{{i}}"
-                                name="assignedGrades{{i}}"
-                                [(ngModel)]="field.gradeSubjects[0].gradeId"
-                                bindLabel="name"
-                                bindValue="id"
-                                [items]="grades()"
-                                placeholder="Select Grades"
-                                required>
-                            </ng-select>
+                    @for (gs of field.gradeSubjects; let j = $index; track j) {
+                        <div class="row my-2 align-items-center">
+                            <div class="col-md-6">
+                                <label class="text-primary" for="assignedGrades{{i}}-{{j}}">Assigned Grades <span class="text-danger">*</span></label>
+                                <ng-select
+                                    id="assignedGrades{{i}}-{{j}}"
+                                    name="assignedGrades{{i}}-{{j}}"
+                                    [(ngModel)]="gs.gradeId"
+                                    [items]="grades()"
+                                    bindLabel="name"
+                                    bindValue="id"
+                                    placeholder="Select Grades"
+                                    required
+                                    ngSelectCloseOnOtherClear>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="text-primary" for="assignedSubjects{{i}}-{{j}}">Assigned Subjects <span class="text-danger">*</span></label>
+                                <ng-select
+                                    id="assignedSubjects{{i}}-{{j}}"
+                                    name="assignedSubjects{{i}}-{{j}}"
+                                    [(ngModel)]="gs.subjectIds"
+                                    bindLabel="name"
+                                    bindValue="id"
+                                    [items]="subjects()"
+                                    placeholder="Select Subjects"
+                                    [multiple]="true"
+                                    required
+                                    ngSelectCloseOnOtherClear>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-center justify-content-center mt-4">
+                                @if (field.gradeSubjects.length > 1) {
+                                    <button class="btn p-0 m-0" type="button" (click)="removeGradeSubject(i, j)" title="Remove Field">
+                                        <i class="bi bi-trash text-danger h5"></i>
+                                    </button>
+                                }
+                                @if (field.gradeSubjects.length < grades().length && j === field.gradeSubjects.length - 1) {
+                                    <button class="btn p-0 m-0 ms-2" type="button" (click)="addGradeSubject(i)" title="Add Field">
+                                        <i class="bi bi-plus-circle text-primary h5"></i>
+                                    </button>
+                                }
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="assignedSubjects{{i}}">Assigned Subjects <span class="text-danger">*</span></label>
-                            <ng-select
-                                id="assignedSubjects{{i}}"
-                                name="assignedSubjects{{i}}"
-                                [(ngModel)]="field.gradeSubjects[0].subjectIds"
-                                bindLabel="name"
-                                bindValue="id"
-                                [items]="subjects()"
-                                placeholder="Select Subjects"
-                                [multiple]="true"
-                                required>
-                            </ng-select>
-                        </div>
-                    </div>
-                    @if (fields().length > 1) {
-                    <div class="row my-2">
-                        <div class="col-md-12">
-                            <button class="btn text-danger" type="button" (click)="removeField(i)">Remove Field</button>
-                        </div>
-                    </div>
                     }
                 </div>
             }

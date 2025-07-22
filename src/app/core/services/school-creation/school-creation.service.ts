@@ -26,15 +26,19 @@ export class SchoolCreationService {
     return this.apiHlpr.post<Result<{fileUrl : string}>>(`school/add/third-step`, obj);
   }
 
-  addSection = (obj: FormData): Observable<Result<FileError>> => {
+  addSection = (obj: AddTemplate): Observable<Result<FileError>> => {
     return this.apiHlpr.post<Result<FileError>>(`school/add/fourth-step`, obj);
   }
 
-  addTeacher = (obj: FormData): Observable<Result<FileError>> => {
+  addTeacher = (obj: AddTemplate): Observable<Result<FileError>> => {
     return this.apiHlpr.post<Result<FileError>>(`school/add/fifth-step`, obj);
   }
 
-  addStudent = (obj: FormData): Observable<Result<FileError>> => {
+  addStudent = (obj: AddTemplate): Observable<Result<FileError>> => {
     return this.apiHlpr.post<Result<FileError>>(`school/add/sixth-step`, obj);
+  }
+
+  validateExcel = (obj: FormData): Observable<Result<FileError>> => {
+    return this.apiHlpr.post<Result<FileError>>(`school/add/validate-excel`, obj);
   }
 }

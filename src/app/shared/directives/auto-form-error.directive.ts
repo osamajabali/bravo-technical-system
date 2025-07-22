@@ -81,6 +81,24 @@ export class AutoFormErrorDirective implements OnInit {
                 }
               }, 100);
             };
+            // Remove error on Enter key (value selection)
+            item.onkeydown = (event: KeyboardEvent) => {
+              if (event.key === 'Enter') {
+                setTimeout(() => {
+                  const errorTextToDelete = document.getElementById('error' + item.id);
+                  errorTextToDelete?.remove();
+                  item.classList.remove('error-input');
+                }, 100);
+              }
+            };
+            // Remove error on value change (any selection method)
+            item.addEventListener('change', () => {
+              setTimeout(() => {
+                const errorTextToDelete = document.getElementById('error' + item.id);
+                errorTextToDelete?.remove();
+                item.classList.remove('error-input');
+              }, 100);
+            });
             break;
 
           case 'app-file-uploader':

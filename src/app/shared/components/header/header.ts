@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, DOCUMENT, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, DOCUMENT, ElementRef, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonDirective } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { LoginService } from '../../../core/services/login-services/login.service';
 
 @Component({
   selector: 'app-header',
@@ -22,8 +23,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
   styleUrl: './header.scss'
 })
 export class Header {
- @ViewChild('filterContent')
-  filterContent: Popover;  // Get the reference to the popover
+ @ViewChild('filterContent') filterContent!: ElementRef<HTMLDivElement>;
+ loginService = inject(LoginService);
+ translate = inject(TranslateService);  
  // Data binding
   title: string = 'Page Title';  // You can dynamically set this value
   userName: string = localStorage.getItem('userName') || '';
@@ -56,10 +58,12 @@ export class Header {
   // Menu items for the user profile menu
   userMenuItems = [
     { label: 'Profile', icon: 'pi pi-user', command: () => { /* Profile action */ } },
-    { label: 'Logout', icon: 'pi pi-sign-out', command: () => { /* Logout action */ } }
+    { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.onLogout() }
   ];
 
-  constructor(private translate: TranslateService) {}
+  onLogout(): void {
+    this.loginService.logout();
+  }
 
   // Function to handle the back button action
   goBack() {

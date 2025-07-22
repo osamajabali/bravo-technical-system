@@ -8,10 +8,12 @@ import { SchoolCreationService } from '../../../core/services/school-creation/sc
 import { GradesAndSubjectsRequest } from '../../../core/models/school-creation/grades-and-subjects.model';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
 import { LoaderService } from '../../../shared/services/loader.service';
+import { NoLeadingSpaceDirective } from '../../../shared/directives/no-leading-space.directive';
+import { NgSelectCloseOnOtherClearDirective } from '../../../shared/directives/ng-select-close-on-other-clear.directive';
 
 @Component({
   selector: 'app-grades-and-subjects',
-  imports: [CommonModule , FormsModule, NgSelectModule, AutoFormErrorDirective],
+  imports: [CommonModule , FormsModule, NgSelectModule, AutoFormErrorDirective, NgSelectCloseOnOtherClearDirective],
   templateUrl: './grades-and-subjects.html',
   styleUrl: './grades-and-subjects.scss'
 })
@@ -21,6 +23,7 @@ export class GradesAndSubjects implements OnInit {
   loaderService = inject(LoaderService);
   gradesAndSubjectsRequest: GradesAndSubjectsRequest = new GradesAndSubjectsRequest();
   grades = signal<Grade[]>([]);
+  filteredGrades = signal<Grade[]>([]);
   subjects = inject(LookUps).lookups().subjects;
   isStepValid = output<boolean>();
   stepSuccess = output<void>();
@@ -38,8 +41,20 @@ export class GradesAndSubjects implements OnInit {
     this.lookUpsService.getGrades([1]).subscribe((res) => {
       if (res.success) {
         this.grades.set(res.data);
+        this.filteredGrades.set(res.data);
       }
     });
+  }
+  onGradeChange(gradeId: number , index: number) {
+    // let checkGrade = this.filteredGrades().find(g => g.id === gradeId);
+    // if(checkGrade){
+    //   this.filteredGrades.set(this.filteredGrades().filter(g => g.id !== gradeId));
+    // }else{
+    //   const gradeToAdd = this.grades().find(g => g.id === gradeId);
+    //   if (gradeToAdd) {
+    //     this.filteredGrades.set([...this.filteredGrades(), gradeToAdd]);
+    //   }
+    // }
   }
 
   addField() {
@@ -58,7 +73,7 @@ export class GradesAndSubjects implements OnInit {
     const selectedGradeIds = this.gradesAndSubjectsRequest.gradeSubjects
       .map((field, idx) => idx !== currentIndex ? field.gradeId : null)
       .filter(id => id !== null);
-    return this.grades().filter(g => !selectedGradeIds.includes(g.gradeId));
+    return this.grades().filter(g => !selectedGradeIds.includes(g.id));
   }
 
 
@@ -74,9 +89,9 @@ export class GradesAndSubjects implements OnInit {
 
     // Map to {id, name} using grades() (find by id, not gradeId)
     const selectedGrades = selectedGradeIds.map(id => {
-      const grade = this.grades().find(g => (g as any).id === id || g.gradeId === id);
+      const grade = this.grades().find(g => (g as any).id === id);
       // Use id if present, otherwise gradeId
-      return grade ? { id: (grade as any).id ?? grade.gradeId, name: grade.name } : null;
+      return grade ? { id: (grade as any).id ?? grade.id, name: grade.name } : null;
     }).filter(g => g !== null);
 
     // Extract all selected subject IDs (flattened)

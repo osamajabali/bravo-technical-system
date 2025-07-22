@@ -55,9 +55,9 @@ export class LoginService {
   }
 
   // // Logout the user and redirect to home
-  logout() {
+  logout (): void {
     localStorage.clear();
-    localStorage.setItem('sessionMessage', 'Your session has expired.');
-    this.router.navigate(['/']);
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

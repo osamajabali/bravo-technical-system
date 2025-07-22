@@ -14,6 +14,7 @@ export class AddSchoolDetailsRequest {
   longitude?: string;
   websiteUrl?: string;
   logo?: File;
+  logoUrl?: string;
   contractExpiryDate?: string; // ISO string or date string
   contactPersonName?: string;
   contactPersonPhone?: string;

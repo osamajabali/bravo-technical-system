@@ -5,25 +5,25 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import * as XLSX from 'xlsx';
 import { SchoolCreationService } from '../../../core/services/school-creation/school-creation.service';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
-import { AddTemplate } from '../../../core/models/school-creation/template.model'; 
+import { AddTemplate, ValidateTemplate } from '../../../core/models/school-creation/template.model';
 import { Configurations } from '../../../core/models/login/configrations';
 import { LoaderService } from '../../../shared/services/loader.service';
+import { NoLeadingSpaceDirective } from '../../../shared/directives/no-leading-space.directive';
 
 @Component({
   selector: 'app-create-section',
-  imports: [CommonModule, FormsModule, NgSelectModule, AutoFormErrorDirective],
+  imports: [CommonModule, FormsModule, NgSelectModule, NoLeadingSpaceDirective],
   templateUrl: './create-section.html',
   styleUrl: './create-section.scss'
 })
-export class CreateSection implements OnInit{
+export class CreateSection implements OnInit {
   @ViewChild('sectionForm') sectionForm!: NgForm;
   @ViewChild('sectionForm', { read: ElementRef }) sectionFormRef!: ElementRef<HTMLFormElement>;
   isStepValid = output<boolean>();
-
+  excelFileName = signal<string>('');
   fileSelected: boolean = false;
   validationResult: { success: boolean, message: string } | null = null;
   teachersData: any[] = [];
-  uploadedData = signal<any[]>([]);
   schoolCreationService = inject(SchoolCreationService);
   loaderService = inject(LoaderService);
   showError = signal<boolean>(false);
@@ -35,15 +35,22 @@ export class CreateSection implements OnInit{
   configrations = signal<Configurations | null>(null);
   backendErrors = signal<string[]>([]);
   stepSuccess = output<void>();
+  isValidating = signal<boolean>(false);
+  isValidated = signal<boolean>(false);
+  validationSuccess = signal<boolean | null>(null); // null = not validated, true = success, false = errors
+  mustValidate = signal<boolean>(true); // Require validation after file change
+  validationError = signal<string>('');
 
   ngOnInit(): void {
     this.configrations.set(JSON.parse(localStorage.getItem('configrations') || '{}'));
     this.requiredColumns.set(this.configrations()?.excelTemplates.find(template => template.id == 1)?.requiredFields || []);
     this.templateUrl.set(this.configrations()?.excelTemplates.find(template => template.id == 1)?.url || '');
-    
+
     if (sessionStorage.getItem('sectionDetails')) {
       const sectionDetails = JSON.parse(sessionStorage.getItem('sectionDetails'));
+      this.excelFileName.set(sectionDetails.excelFileName);
       this.isUpdateStep.set(true);
+      this.mustValidate.set(false); // Allow submit if loaded from storage
 
       // Retrieve file from sessionStorage if present
       if (sectionDetails.fileData && sectionDetails.fileName && sectionDetails.fileType) {
@@ -56,12 +63,15 @@ export class CreateSection implements OnInit{
     }
   }
 
-  
+
   onFileChange(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      this.processFileForPreview(file);
-    }
+    this.selectedFile.set(file || null);
+    this.isValidated.set(false);
+    this.validationSuccess.set(null);
+    this.backendErrors.set([]);
+    this.mustValidate.set(true); // Require validation after file change
+    this.validationError.set('');
   }
 
   validateAndReadFile(file: File): void {
@@ -76,10 +86,10 @@ export class CreateSection implements OnInit{
 
       // Predefined template validation
       const isValid = this.validateTemplate(data);
-        this.teachersData = data;
-        this.validationResult = { success: true, message: 'File is valid. Ready for import.' };
-        // Set uploadedData for preview (excluding header row)
-        this.uploadedData.set(data);
+      this.teachersData = data;
+      this.validationResult = { success: true, message: 'File is valid. Ready for import.' };
+      // Set uploadedData for preview (excluding header row)
+      // this.uploadedData.set(data); // Removed as per edit hint
 
       this.fileSelected = true;
     };
@@ -95,8 +105,63 @@ export class CreateSection implements OnInit{
     return requiredHeaders.every((header, index) => headers[index] === header);
   }
 
+  async onValidate(): Promise<void> {
+    const file = this.selectedFile();
+    if (!file) return;
+    this.isValidating.set(true);
+    this.isValidated.set(false);
+    this.validationSuccess.set(null);
+    this.backendErrors.set([]);
+    // Prepare FormData for validation
+    let validateModel = {
+      schoolId: JSON.parse(sessionStorage.getItem('schoolDetails')).schoolId,
+      courseType: JSON.parse(sessionStorage.getItem('courseType')),
+      excelType: 1,
+      excelFile: file,
+    };
+    let formData = this.toFormData(validateModel);
+    this.schoolCreationService.validateExcel(formData).subscribe({
+      next: (res) => {
+        if (res.data && res.data.isSuccess === false) {
+          const errors = (res.data.errors || []).map((err: any) => `Row ${err.rowNumber}, Column ${err.columnName}: ${err.errorMessage}`);
+          this.backendErrors.set(errors.length ? errors : ['Unknown error occurred.']);
+          this.validationSuccess.set(false);
+        } else if (res.success) {
+          this.validationSuccess.set(true);
+          this.excelFileName.set(res.data.excelFileName);
+        }
+        this.isValidating.set(false);
+        this.isValidated.set(true);
+        this.mustValidate.set(false); // Validation done
+        this.validationError.set('');
+      },
+      error: () => {
+        this.backendErrors.set(['An error occurred while validating the file.']);
+        this.validationSuccess.set(false);
+        this.isValidating.set(false);
+        this.isValidated.set(true);
+        this.mustValidate.set(false); // Validation done
+        this.validationError.set('');
+      }
+    });
+  }
+
+  onDeleteFile() {
+    this.selectedFile.set(null);
+    this.isValidated.set(false);
+    this.validationSuccess.set(null);
+    this.backendErrors.set([]);
+    this.mustValidate.set(true); // Require validation after file change
+    this.validationError.set('');
+  }
+
   async onSubmit(form: NgForm): Promise<void> {
     if (form.invalid) {
+      this.isStepValid.emit(false);
+      return;
+    }
+    if (this.mustValidate()) {
+      this.validationError.set('Please validate your file before submitting.');
       this.isStepValid.emit(false);
       return;
     }
@@ -109,23 +174,19 @@ export class CreateSection implements OnInit{
 
     // Convert file to base64 for storage
     const fileBase64 = await this.fileToBase64(selectedFile);
-    
+
     let addSection = {
       schoolId: JSON.parse(sessionStorage.getItem('schoolDetails')).schoolId,
       stepNumber: 4,
       isUpdateStep: this.isUpdateStep(),
       courseType: JSON.parse(sessionStorage.getItem('courseType')),
-      sectionsExcel: selectedFile, // Keep original file for API call
-      fileData: fileBase64, // Store base64 for sessionStorage
-      fileName: selectedFile.name,
-      fileType: selectedFile.type
+      excelFileName : this.excelFileName()
     };
 
     // Show loader
     this.loaderService.showStepLoader(3);
 
-    let formData = this.toFormData(addSection);
-    this.schoolCreationService.addSection(formData).subscribe({
+    this.schoolCreationService.addSection(addSection).subscribe({
       next: (res) => {
         // Check for backend error
         if (res.data && res.data.isSuccess === false) {
@@ -144,9 +205,10 @@ export class CreateSection implements OnInit{
             stepNumber: addSection.stepNumber,
             isUpdateStep: addSection.isUpdateStep,
             courseType: addSection.courseType,
-            fileData: addSection.fileData,
-            fileName: addSection.fileName,
-            fileType: addSection.fileType
+            excelFileName: addSection.excelFileName,
+            fileData: fileBase64,
+            fileName: selectedFile.name,
+            fileType: selectedFile.type
           };
           sessionStorage.setItem('sectionDetails', JSON.stringify(storageData));
           this.isStepValid.emit(true);
@@ -165,7 +227,7 @@ export class CreateSection implements OnInit{
     });
   }
 
-  toFormData(model: AddTemplate): FormData {
+  toFormData(model: ValidateTemplate): FormData {
     const formData = new FormData();
     Object.entries(model).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -209,7 +271,7 @@ export class CreateSection implements OnInit{
       const binaryStr = e.target.result;
       const wb = XLSX.read(binaryStr, { type: 'binary' });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      this.uploadedData.set(XLSX.utils.sheet_to_json(ws).slice(0, 5));
+      // this.uploadedData.set(XLSX.utils.sheet_to_json(ws).slice(0, 5)); // Removed as per edit hint
       this.validationResult = {
         success: true,
         message: 'File successfully parsed. Preview shown below.'

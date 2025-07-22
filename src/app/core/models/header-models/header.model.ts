@@ -7,7 +7,7 @@ export class Classes {
   
 
   export class Grade {
-    gradeId: number;
+    id: number;
     name: string;
     isSelected: boolean;
   }

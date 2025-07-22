@@ -7,10 +7,12 @@ import { Admin, AdminsRequest } from '../../../core/models/school-creation/admin
 import { SchoolCreationService } from '../../../core/services/school-creation/school-creation.service';
 import { AutoFormErrorDirective } from '../../../shared/directives/auto-form-error.directive';
 import { LoaderService } from '../../../shared/services/loader.service';
+import { NoLeadingSpaceDirective } from '../../../shared/directives/no-leading-space.directive';
+import { NgSelectCloseOnOtherClearDirective } from '../../../shared/directives/ng-select-close-on-other-clear.directive';
 
 @Component({
   selector: 'app-school-admin',
-  imports: [FormsModule, CommonModule, NgSelectModule, AutoFormErrorDirective],
+  imports: [FormsModule, CommonModule, NgSelectModule, AutoFormErrorDirective, NoLeadingSpaceDirective, NgSelectCloseOnOtherClearDirective],
   templateUrl: './school-admin.html',
   styleUrl: './school-admin.scss'
 })
@@ -41,7 +43,13 @@ export class SchoolAdmin implements OnInit {
     this.grades.set(JSON.parse(sessionStorage.getItem('selectedGrades') || '[]'));
     this.subjects.set(JSON.parse(sessionStorage.getItem('selectedSubjects') || '[]'));
     if (sessionStorage.getItem('admins')) {
-      this.fields.set(JSON.parse(sessionStorage.getItem('admins')).admins);
+      const admins = JSON.parse(sessionStorage.getItem('admins')).admins;
+      admins.forEach(admin => {
+        admin.gradeSubjects.forEach(gs => {
+          gs.gradeId = gs.gradeId !== null ? +gs.gradeId : null;
+        });
+      });
+      this.fields.set(admins);
     }
   }
 
@@ -62,6 +70,14 @@ export class SchoolAdmin implements OnInit {
 
   removeField(index: number) {
     this.fields().splice(index, 1);
+  }
+
+  addGradeSubject(adminIndex: number) {
+    this.fields()[adminIndex].gradeSubjects.push({ gradeId: null, subjectIds: [] });
+  }
+
+  removeGradeSubject(adminIndex: number, gsIndex: number) {
+    this.fields()[adminIndex].gradeSubjects.splice(gsIndex, 1);
   }
 
   onSubmit() {
