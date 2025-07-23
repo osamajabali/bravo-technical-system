@@ -5,7 +5,8 @@
     <div class="card-body">
             <form #adminForm="ngForm" AutoFormError (ngSubmit)="onSubmit()">
             @for (field of fields(); let i = $index; track i) {
-                <div class="form-group border p-2">
+                <div class="form-group border p-2 position-relative">
+
                     <div class="row my-2">
 
                         <div class="col-md-4">
@@ -43,7 +44,6 @@
                                 bindLabel="name"
                                 bindValue="id"
                                 [items]="[
-                                    { id: 0, name: 'Select Gender' },
                                     { id: 1, name: 'Male' },
                                     { id: 2, name: 'Female' }
                                 ]"
@@ -61,7 +61,7 @@
                             <input type="text" class="form-control" id="phoneNumber{{i}}" name="phoneNumber{{i}}" [(ngModel)]="field.phoneNumber" required noLeadingSpace />
                         </div>
                     </div>
-                    @for (gs of field.gradeSubjects; let j = $index; track j) {
+                    @for (gs of field.gradeSubjects; let j = $index; track $index) {
                         <div class="row my-2 align-items-center">
                             <div class="col-md-6">
                                 <label class="text-primary" for="assignedGrades{{i}}-{{j}}">Assigned Grades <span class="text-danger">*</span></label>
@@ -69,15 +69,17 @@
                                     id="assignedGrades{{i}}-{{j}}"
                                     name="assignedGrades{{i}}-{{j}}"
                                     [(ngModel)]="gs.gradeId"
-                                    [items]="grades()"
+                                    [items]="filteredGrades()"
+                                    (ngModelChange)="onGradeChange(gs.gradeId, i, j)"
                                     bindLabel="name"
                                     bindValue="id"
+                                    [clearable]="false"
                                     placeholder="Select Grades"
                                     required
                                     ngSelectCloseOnOtherClear>
                                 </ng-select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <label class="text-primary" for="assignedSubjects{{i}}-{{j}}">Assigned Subjects <span class="text-danger">*</span></label>
                                 <ng-select
                                     id="assignedSubjects{{i}}-{{j}}"
@@ -88,27 +90,27 @@
                                     [items]="subjects()"
                                     placeholder="Select Subjects"
                                     [multiple]="true"
+                                    [closeOnSelect]="false"
                                     required
                                     ngSelectCloseOnOtherClear>
                                 </ng-select>
                             </div>
-                            <div class="col-md-1 d-flex align-items-center justify-content-center mt-4">
-                                @if (field.gradeSubjects.length > 1) {
-                                    <button class="btn p-0 m-0" type="button" (click)="removeGradeSubject(i, j)" title="Remove Field">
-                                        <i class="bi bi-trash text-danger h5"></i>
-                                    </button>
-                                }
-                                @if (field.gradeSubjects.length < grades().length && j === field.gradeSubjects.length - 1) {
-                                    <button class="btn p-0 m-0 ms-2" type="button" (click)="addGradeSubject(i)" title="Add Field">
-                                        <i class="bi bi-plus-circle text-primary h5"></i>
-                                    </button>
-                                }
-                            </div>
                         </div>
                     }
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <button class="btn text-primary" type="button" (click)="addField()">Add Another Admin</button>
+                        </div>
+                        <div class="col-md-6 text-start">
+                            @if (fields().length > 1) {
+                                <button type="button" class="btn text-danger" (click)="removeField(i)" title="Delete Admin">
+                                    <i class="bi bi-trash"></i> Delete Admin
+                                </button>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
-            <button class="btn text-primary" type="button" (click)="addField()">Add Admin</button>
         </form>
     </div>
 </div>

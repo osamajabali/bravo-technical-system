@@ -25,6 +25,8 @@ export class SchoolAdmin implements OnInit {
   loaderService = inject(LoaderService);
   stepSuccess = output<void>();
   isStepValid = output<boolean>();
+  filteredGrades = signal<LookupItem[]>([]);
+  previousGradeIds: { [adminIndex: number]: { [gsIndex: number]: number | null } } = {};
   // Each admin field is of type Admin, but with UI helpers for selection
   fields = signal<Admin[]>([{
     genderId: null,
@@ -42,11 +44,17 @@ export class SchoolAdmin implements OnInit {
   ngOnInit(): void {
     this.grades.set(JSON.parse(sessionStorage.getItem('selectedGrades') || '[]'));
     this.subjects.set(JSON.parse(sessionStorage.getItem('selectedSubjects') || '[]'));
+    this.filteredGrades.set(this.grades());
     if (sessionStorage.getItem('admins')) {
       const admins = JSON.parse(sessionStorage.getItem('admins')).admins;
-      admins.forEach(admin => {
-        admin.gradeSubjects.forEach(gs => {
+      admins.forEach((admin, adminIndex) => {
+        admin.gradeSubjects.forEach((gs, gsIndex) => {
           gs.gradeId = gs.gradeId !== null ? +gs.gradeId : null;
+          if (!this.previousGradeIds[adminIndex]) this.previousGradeIds[adminIndex] = {};
+          this.previousGradeIds[adminIndex][gsIndex] = gs.gradeId;
+          if (gs.gradeId != null) {
+            this.onGradeChange(gs.gradeId, adminIndex, gsIndex);
+          }
         });
       });
       this.fields.set(admins);
@@ -78,6 +86,31 @@ export class SchoolAdmin implements OnInit {
 
   removeGradeSubject(adminIndex: number, gsIndex: number) {
     this.fields()[adminIndex].gradeSubjects.splice(gsIndex, 1);
+  }
+
+  onGradeChange(gradeId: number, adminIndex: number, gsIndex: number) {
+    if (!this.previousGradeIds[adminIndex]) this.previousGradeIds[adminIndex] = {};
+    const prevGradeId = this.previousGradeIds[adminIndex][gsIndex];
+    // Remove the new grade from the available grades
+    this.filteredGrades.set(this.filteredGrades().filter(g => g.id !== gradeId));
+    // If there was a previous grade, return it to the available grades
+    if (prevGradeId && prevGradeId !== gradeId) {
+      const prevGrade = this.grades().find(g => g.id === prevGradeId);
+      if (prevGrade) {
+        const originalIndex = this.grades().findIndex(g => g.id === prevGradeId);
+        const filtered = [...this.filteredGrades()];
+        // Find where to insert in filteredGrades to match the original order
+        let insertAt = filtered.findIndex(g => {
+          const idx = this.grades().findIndex(og => og.id === g.id);
+          return idx > originalIndex;
+        });
+        if (insertAt === -1) insertAt = filtered.length;
+        filtered.splice(insertAt, 0, prevGrade);
+        this.filteredGrades.set(filtered);
+      }
+    }
+    // Update the tracker with the new gradeId
+    this.previousGradeIds[adminIndex][gsIndex] = gradeId;
   }
 
   onSubmit() {

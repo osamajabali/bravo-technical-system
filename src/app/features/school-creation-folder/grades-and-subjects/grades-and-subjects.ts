@@ -29,6 +29,7 @@ export class GradesAndSubjects implements OnInit {
   stepSuccess = output<void>();
   selectedGrade = signal<number[]>([]);
   availableGradesVersion = signal<number>(0);
+  previousGradeIds: { [index: number]: number | null } = {};
   @ViewChild('gradesAndSubjectsForm', { read: ElementRef }) gradesAndSubjectsFormRef!: ElementRef<HTMLFormElement>;
   ngOnInit(): void {
     this.getGrades();
@@ -42,19 +43,44 @@ export class GradesAndSubjects implements OnInit {
       if (res.success) {
         this.grades.set(res.data);
         this.filteredGrades.set(res.data);
+        // After grades are loaded, apply filtering if data is present
+        if (this.gradesAndSubjectsRequest.gradeSubjects && this.gradesAndSubjectsRequest.gradeSubjects.length > 0) {
+          setTimeout(() => {
+            this.gradesAndSubjectsRequest.gradeSubjects.forEach((gs, index) => {
+              if (gs.gradeId != null) {
+                this.onGradeChange(gs.gradeId, index);
+              }
+            });
+          });
+        }
       }
     });
   }
-  onGradeChange(gradeId: number , index: number) {
-    // let checkGrade = this.filteredGrades().find(g => g.id === gradeId);
-    // if(checkGrade){
-    //   this.filteredGrades.set(this.filteredGrades().filter(g => g.id !== gradeId));
-    // }else{
-    //   const gradeToAdd = this.grades().find(g => g.id === gradeId);
-    //   if (gradeToAdd) {
-    //     this.filteredGrades.set([...this.filteredGrades(), gradeToAdd]);
-    //   }
-    // }
+  onGradeChange(gradeId: number, index: number) {
+    const prevGradeId = this.previousGradeIds[index];
+
+    // Remove the new grade from the available grades
+    this.filteredGrades.set(this.filteredGrades().filter(g => g.id !== gradeId));
+
+    // If there was a previous grade, return it to the available grades
+    if (prevGradeId && prevGradeId !== gradeId) {
+      const prevGrade = this.grades().find(g => g.id === prevGradeId);
+      if (prevGrade) {
+        const originalIndex = this.grades().findIndex(g => g.id === prevGradeId);
+        const filtered = [...this.filteredGrades()];
+        // Find where to insert in filteredGrades to match the original order
+        let insertAt = filtered.findIndex(g => {
+          const idx = this.grades().findIndex(og => og.id === g.id);
+          return idx > originalIndex;
+        });
+        if (insertAt === -1) insertAt = filtered.length;
+        filtered.splice(insertAt, 0, prevGrade);
+        this.filteredGrades.set(filtered);
+      }
+    }
+
+    // Update the tracker with the new gradeId
+    this.previousGradeIds[index] = gradeId;
   }
 
   addField() {
@@ -63,6 +89,9 @@ export class GradesAndSubjects implements OnInit {
 
   removeField(index: number) {
     this.gradesAndSubjectsRequest.gradeSubjects.splice(index, 1);
+    if(this.gradesAndSubjectsRequest.gradeSubjects.length === 0){
+      this.gradesAndSubjectsRequest.gradeSubjects.push({ gradeId: null, subjectIds: [] });
+    }
   }
 
   getAvailableGrades(currentIndex: number) {

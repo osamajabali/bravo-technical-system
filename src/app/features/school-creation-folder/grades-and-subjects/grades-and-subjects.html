@@ -30,6 +30,7 @@
               bindLabel="name"
               [(ngModel)]="field.subjectIds"
               [items]="subjects"
+              [closeOnSelect]="false"
               placeholder="Select Subject"
               name="subject{{$index}}"
               bindValue="id"
@@ -38,20 +39,27 @@
             </ng-select>
           </div>
           <div class="col-md-1 d-flex align-items-center justify-content-center mt-4">
-            @if (gradesAndSubjectsRequest.gradeSubjects.length > 1) {
               <button class="btn p-0 m-0" type="button" (click)="removeField($index)" title="Remove Field">
                 <i class="bi bi-trash text-danger h5"></i>
               </button>
-            }
-            @if ($index === gradesAndSubjectsRequest.gradeSubjects.length - 1) {
-              <button class="btn p-0 m-0 ms-2" type="button" (click)="addField()" title="Add Field">
-                <i class="bi bi-plus-circle text-primary h5"></i>
-              </button>
-            }
           </div>
         </div>
       </div>
       }
+      <!-- Add Grade Button under Grade column -->
+      <div class="row mt-3">
+        <div class="col-md-5">
+          <button
+            class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center"
+            type="button"
+            (click)="addField()"
+            title="Add Grade"
+          >
+            <i class="bi bi-plus-circle me-2"></i>
+            Add Grade
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
