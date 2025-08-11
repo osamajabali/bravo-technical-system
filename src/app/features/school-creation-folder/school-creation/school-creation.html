@@ -46,7 +46,7 @@
     [ngClass]="activeStep() === 0 ? 'center' : ''">
     <div class="d-flex">
       <!-- Previous Button -->
-    @if (activeStep() != 0) {
+    @if (activeStep() != 0 && activeStep() != 6) {
         <button type="button" class="btn btn-outline-primary me-3" (click)="back()">
           <i class="bi bi-arrow-left me-2"></i>Previous
         </button>

@@ -1,0 +1,130 @@
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4 class="mb-0">Start school year</h4>
+  </div>
+  <div class="card-body">
+    <p class="text-muted mb-4">
+      This step to setup the school start academic year. If you do not find a specific school in the table below,
+      please go to End Year page to end its pre-school year, and then you can start a new academic year for it.
+    </p>
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab==='school'" (click)="switchTab('school')">School Information</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [class.active]="activeTab==='student'" (click)="switchTab('student')">Student</a>
+      </li>
+    </ul>
+
+    @if (activeTab === 'school') {
+      <div>
+        <div class="alert alert-info">
+          <div><strong>School:</strong> {{ summary()?.school?.nameEnglish }} (ID: {{ summary()?.school?.schoolId }})</div>
+          <div class="text-muted">{{ summary()?.school?.nameArabic }}</div>
+          <div class="mt-2"><strong>Number of students:</strong> {{ summary()?.numberOfStudents || 0 }}</div>
+        </div>
+      </div>
+    } @else {
+      <div>
+        <div class="mb-3">
+          <h6 class="fw-bold">{{summary()?.school?.nameEnglish}}</h6>
+          <small class="text-muted">You can select the students based on the below filtration:</small>
+        </div>
+
+        <div class="row g-3 align-items-end mb-3">
+          <div class="col-md-3">
+            <label class="text-primary" for="gradeSelect">Select Grade</label>
+            <ng-select
+              id="gradeSelect"
+              [items]="summary()?.gradesList"
+              bindLabel="nameEnglish"
+              bindValue="gradeId"
+              [(ngModel)]="selectedGradeId"
+              name="gradeId"
+              placeholder="Select Grade"
+              >
+            </ng-select>
+          </div>
+          <div class="col-md-3">
+            <label class="text-primary" for="homeroomSelect">Select Homeroom</label>
+            <ng-select
+              id="homeroomSelect"
+              bindLabel="name"
+              bindValue="id"
+              [(ngModel)]="selectedHomeroomId"
+              name="homeroomId"
+              placeholder="Select"
+              (ngModelChange)="onSearch()">
+            </ng-select>
+          </div>
+          <div class="col-md-6">
+            <label class="text-primary" for="studentSearch">Search</label>
+            <div class="d-flex justify-content-end gap-2">
+              <input
+                id="studentSearch"
+                type="text"
+                class="form-control w-50"
+                placeholder="Type to search in name or username"
+                [(ngModel)]="searchTerm"
+                name="studentSearch"
+                (ngModelChange)="onSearchTermChange($event)"
+              />
+              <button class="btn btn-primary" (click)="onSearch()">
+                <i class="bi bi-search me-1"></i> Search
+              </button>
+              <button class="btn btn-secondary" (click)="onBulkSectioning()">
+                <i class="bi bi-collection me-1"></i> Bulk Sectioning
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-start align-items-center mb-2">
+            <button class="btn btn-outline-secondary btn-sm me-2">CSV</button>
+            <button class="btn btn-outline-secondary btn-sm me-2">Excel</button>
+            <button class="btn btn-outline-secondary btn-sm me-2">PDF</button>
+            <button class="btn btn-outline-secondary btn-sm">Print</button>
+        </div>
+
+        @if (loading()) {
+          <div class="text-center py-5">
+            <span class="spinner-border" role="status"></span>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead class="bg-primary">
+                <tr>
+                  <th>Student First Name</th>
+                  <th>Student Last Name</th>
+                  <th>Current Grade</th>
+                  <th>Current Homeroom</th>
+                  <th>Prv Homeroom</th>
+                  <th>Student Username</th>
+                  <th>Student Password</th>
+                  <th class="text-center">Change homeroom</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of filteredStudents(); track s.school.schoolId) {
+                  <tr>
+                   
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="text-muted mt-2">Showing 1 to {{ pageSize() < filteredStudents().length ? pageSize() : filteredStudents().length }} of {{ summary()?.numberOfStudents || 0 }} entries</div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<app-bulk-sectioning-modal
+  [isOpen]="showBulkModal()"
+  (close)="onBulkModalClose()"
+  (upload)="onBulkUpload($event)">
+</app-bulk-sectioning-modal>
+

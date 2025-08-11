@@ -21,6 +21,11 @@ export class SideBar {
       route: '/features/school-creation',
       icon: 'building-add'
     },
+    {
+      label: 'New Year',
+      route: '/features/new-year',
+      icon: 'calendar2-plus'
+    },
   ];
 
   router = inject(Router);

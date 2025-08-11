@@ -33,15 +33,21 @@ export class SchoolDetails implements OnInit {
   @ViewChild('schoolForm', { read: ElementRef }) schoolFormRef!: ElementRef<HTMLFormElement>;
 
   ngOnInit(): void {
-    if(sessionStorage.getItem('schoolDetails')){
+    if (sessionStorage.getItem('schoolDetails')) {
       this.schoolDetails.set(JSON.parse(sessionStorage.getItem('schoolDetails') || '{}'));
       this.getCities();
       this.courseType = parseInt(sessionStorage.getItem('courseType') || '1');
       // Set preview if logoUrl exists
-      if (this.schoolDetails().logoUrl) {
-        this.schoolLogoPreviewUrl.set(this.schoolDetails().logoUrl);
+      let uploadedImage = JSON.parse(sessionStorage.getItem('uploadedLogo'));
+      if (uploadedImage) {
+        this.schoolLogoPreviewUrl.set(uploadedImage.base64);
+        // this.schoolDetails().logo = uploadedImage;
       }
     }
+  }
+
+  onPrevious() {
+    sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails()));
   }
 
   onSubmit(form: NgForm) {
@@ -49,10 +55,10 @@ export class SchoolDetails implements OnInit {
     if (form.invalid) {
       return;
     }
-    
+
     // Show loader
     this.loaderService.showStepLoader(0);
-    
+
     this.schoolDetails().schoolId = 0;
     this.schoolDetails().stepNumber = 1;
     const formData = this.toFormData(this.schoolDetails());
@@ -61,7 +67,7 @@ export class SchoolDetails implements OnInit {
         if (res.success) {
           this.schoolDetails().schoolId = res.data.newSchoolId;
           sessionStorage.setItem('schoolDetails', JSON.stringify(this.schoolDetails()));
-          sessionStorage.setItem('courseType',  this.courseType.toString());
+          sessionStorage.setItem('courseType', this.courseType.toString());
           this.stepSuccess.emit();
         }
         // Hide loader
@@ -81,22 +87,51 @@ export class SchoolDetails implements OnInit {
     }
   }
 
-  onLogoFileChange(event: Event) {
+  onLogoFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      this.schoolDetails().logo = file;
-      // Clean up previous blob URL
-      if (this.logoBlobUrl) {
-        URL.revokeObjectURL(this.logoBlobUrl);
-      }
-      const url = URL.createObjectURL(file);
-      this.logoBlobUrl = url;
-      this.schoolLogoPreviewUrl.set(url);
-      this.schoolDetails().logoUrl = url;
+
+      // Create a FileReader to convert the image to a base64 string
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        // Create an object to store file information and base64 string
+        const fileInfo = {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          base64: reader.result as string
+        };
+
+        // Save the file information in session storage
+        sessionStorage.setItem('uploadedLogo', JSON.stringify(fileInfo));
+
+        // Update the schoolDetails object with the logo file
+        this.schoolDetails().logo = file;
+
+        // Clean up the previous blob URL if it exists
+        if (this.logoBlobUrl) {
+          URL.revokeObjectURL(this.logoBlobUrl);
+        }
+
+        // Create a new blob URL for the image
+        const url = URL.createObjectURL(file);
+        this.logoBlobUrl = url;
+
+        // Set the school logo preview URL
+        this.schoolLogoPreviewUrl.set(url);
+
+        // Save the blob URL in school details (optional)
+        this.schoolDetails().logoUrl = url;
+      };
+
+      // Convert the file to base64
+      reader.readAsDataURL(file);
     }
-    // If user cancels, do not clear preview or file
   }
+
 
   ngOnDestroy() {
     if (this.logoBlobUrl) {

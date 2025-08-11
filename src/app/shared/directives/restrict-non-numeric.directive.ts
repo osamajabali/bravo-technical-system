@@ -5,7 +5,7 @@ import { Directive, HostListener } from '@angular/core';
 })
 export class RestrictNonNumericDirective {
 
-  private allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+  private allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete',',','.'];
 
   @HostListener('keydown', ['$event'])
   restrictNonNumeric(event: KeyboardEvent): void {

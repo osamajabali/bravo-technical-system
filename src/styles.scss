@@ -13,9 +13,6 @@ body {
   height: 100vh;
   overflow: hidden;
 
-  .p-menu {
-    left: 900px !important;
-  }
   [dir="ltr"] {
     text-align: left;
     direction: ltr;
@@ -105,9 +102,6 @@ a {
 }
 
 /* Hide scrollbar for the entire window */
-// ::-webkit-scrollbar {
-//   display: none;
-// }
 
 /* For Firefox */
 // * {
@@ -132,4 +126,12 @@ ng-select.error-input,
 .ng-select .ng-select-container.error-input {
   border: 1.5px solid var(--negative-icon) !important;
   box-shadow: none !important;
+}
+
+[dir='ltr'] .p-menu {
+  left: 1000px !important;
+}
+
+[dir='rtl'] .p-menu {
+  left: 11px !important;
 }

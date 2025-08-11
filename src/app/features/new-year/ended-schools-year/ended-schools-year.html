@@ -1,0 +1,91 @@
+<div class="card mt-5">
+  <div class="card-header bg-primary text-white">
+    <h4>Ended Schools Year</h4>
+  </div>
+  <div class="card-body">
+    <form class="mb-3">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="text-primary" for="filterType">Filter By</label>
+          <ng-select
+            id="filterType"
+            name="filterType"
+            [(ngModel)]="filterType"
+            [items]="filterOptions"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Select filter"
+            (ngModelChange)="onFilterTypeChange($event)"
+            [clearable]="false"
+            ngSelectCloseOnOtherClear>
+          </ng-select>
+        </div>
+
+        @if (filterType === 'chain') {
+          <div class="col-md-6">
+            <label class="text-primary" for="organizationId">Organization</label>
+            <ng-select
+              id="organizationId"
+              name="organizationId"
+              [(ngModel)]="selectedOrganizationId"
+              [items]="organizations()"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select Organization"
+              (ngModelChange)="onOrganizationChange()"
+              ngSelectCloseOnOtherClear>
+            </ng-select>
+          </div>
+        }
+        <div class="col-md-4 ms-auto">
+          <label class="text-primary" for="schoolSearch">Search School</label>
+          <input
+            id="schoolSearch"
+            type="text"
+            class="form-control"
+            placeholder="Type to filter by name"
+            [(ngModel)]="searchTerm"
+            name="schoolSearch"
+            (ngModelChange)="onSearchChange($event)"
+          />
+        </div>
+      </div>
+    </form>
+
+    @if (loading()) {
+      <div class="text-center py-5">
+        <span class="spinner-border" role="status"></span>
+      </div>
+    } @else {
+      @if (filteredSchools().length === 0) {
+        <div class="alert alert-info">No schools found for the selected filters.</div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="bg-primary">
+              <tr>
+                <th>#</th>
+                <th>School</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (school of filteredSchools(); track school.id; let i = $index) {
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ school.name }}</td>
+                  <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="startNewYear(school)">
+                        Start New Year <i class="bi bi-arrow-right me-1"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </div>
+</div>
+

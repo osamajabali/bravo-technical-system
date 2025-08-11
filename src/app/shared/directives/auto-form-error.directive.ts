@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Directive({
@@ -11,9 +11,9 @@ export class AutoFormErrorDirective implements OnInit {
     this.autoScrollForFirstInvalidControl(event);
   }
 
-  constructor(private translate: TranslateService, public elementRef: ElementRef) {}
+  constructor(private translate: TranslateService, public elementRef: ElementRef, private renderer: Renderer2) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   autoScrollForFirstInvalidControl(event: Event): void {
     const firstInvalidControl: HTMLElement = document.querySelector(
@@ -44,6 +44,9 @@ export class AutoFormErrorDirective implements OnInit {
           const uploadBorder = document.getElementById('upload-border');
           if (uploadBorder) {
             uploadBorder.classList.remove('border-success');
+            const ngSelectContainer = item.closest('.ng-select-container');
+
+            this.renderer.setStyle(ngSelectContainer, 'border-color', 'red !important'); // Removes border color
             uploadBorder.classList.add('border-danger');
           }
           const uploadIcon = document.getElementById('upload-icon');

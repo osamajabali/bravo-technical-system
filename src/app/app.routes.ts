@@ -18,6 +18,6 @@ export const routes: Routes = [
     {
         path: 'features',
         canActivate: [AuthGuard],
-        loadChildren: () => import('./features/main-layout/layout-route/main-layout.routes').then(m => m.Main_Layout_Routes)
+        loadChildren: () => import('./features/main-layout/main-layout.routes').then(m => m.Main_Layout_Routes)
     },
 ];

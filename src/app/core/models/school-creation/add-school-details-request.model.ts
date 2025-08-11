@@ -13,7 +13,7 @@ export class AddSchoolDetailsRequest {
   latitude?: string;
   longitude?: string;
   websiteUrl?: string;
-  logo?: File;
+  logo?: any;
   logoUrl?: string;
   contractExpiryDate?: string; // ISO string or date string
   contactPersonName?: string;
